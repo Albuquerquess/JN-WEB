@@ -7,14 +7,21 @@ export default createGlobalStyle`
     box-sizing: border-box;
     outline: 0;
   }
-  body {
-    background: #312e38;
-    color: #fff;
-    -webkit-font-smoothing: antialiased;
+  div#root {
+    height: 100vh
   }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    -webkit-font-smoothing: antialiased;
+    width: 100vw;
+    height: 100%
+  }
+
   body, input, button {
-    font-family: 'Roboto Slab', serif;
-    font-size: 16px;
+    font-family: 'Roboto', serif;
+    font-size: 62.5%;
   }
   h1, h2, h3, h4, h5, h6, strong {
     font-weight: 500;
