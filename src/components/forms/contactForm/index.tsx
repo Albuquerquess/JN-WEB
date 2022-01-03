@@ -31,7 +31,7 @@ const ContactForm: React.FC = () => {
     });
 
     if (response.status === 200 || response.status === 204) {
-      navigate('/personalize');
+      navigate('/detalhes');
       removeAllToasts();
       addToast('Informaçõoes salvas', {
         appearance: 'success',
