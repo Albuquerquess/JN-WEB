@@ -17,6 +17,18 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     width: 100vw;
     height: 100%;
+
+    /* Select Icon Price Index */
+    div.select-label {
+      display: flex;
+      align-items: center;
+
+      & > img.price-index-icon-img {
+        height: 2em;
+        width: auto;
+        margin-right: 1em;
+      }
+    }
   }
 
   body, input, button {

@@ -1,20 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import ReactSelect from 'react-select';
 
+import { ISelectProps } from '../../types/select';
 import { Container } from './styles';
-
-type option = {
-  value: string;
-  label: JSX.Element;
-};
-
-interface ISelectProps {
-  options: option[];
-  defaultValue: option;
-  placeholder: string | undefined;
-  setValue(value: string): void;
-  menuDirection: 'bottom' | 'top' | 'auto';
-}
 
 const Select: React.FC<ISelectProps> = ({
   options,
@@ -26,11 +15,11 @@ const Select: React.FC<ISelectProps> = ({
   const customStyles = {
     control: (base: any) => ({
       ...base,
-      background: false ? 'rgba(144, 144, 144, 0.4)' : '#909090',
+      background: '#909090',
       color: 'white',
       borderRadius: '.5em',
       boxShadow: null,
-      borderColor: false ? 'rgba(144, 144, 144, 0.4)' : '#909090',
+      borderColor: false,
       fontWeight: 'bold',
       fontSize: '14px',
     }),
@@ -65,6 +54,11 @@ const Select: React.FC<ISelectProps> = ({
     }),
   };
 
+  console.log({
+    options,
+    defaultValue,
+  });
+
   return (
     <Container>
       <ReactSelect
@@ -74,7 +68,7 @@ const Select: React.FC<ISelectProps> = ({
         classNamePrefix="react-select"
         placeholder={placeholder}
         options={options}
-        defaultValue={defaultValue}
+        value={defaultValue}
         isMulti={false}
         components={{
           IndicatorSeparator: () => null,

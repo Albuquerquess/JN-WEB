@@ -12,6 +12,7 @@ export const Container = styled.div<IContainerPropsWithOnclick>`
   align-items: center;
   justify-content: center;
   border-radius: 0.5em;
+  cursor: pointer;
 
   span#text {
     font-size: 1.8em;

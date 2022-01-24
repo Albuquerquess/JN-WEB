@@ -1,12 +1,16 @@
 import { useFormik } from 'formik';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
 import URLs from '../../../helpers/URLs';
 import Api from '../../../services/api';
+import { addContact } from '../../../store/actions/contacts';
+import { reducersType } from '../../../store/reducers';
 import { IRegisterNewLeadProps } from '../../../types/forms/contacts';
+import { IContact } from '../../../types/redux/contacts';
 import Button from '../../button';
 import Input from '../../input';
 import { Container } from './styles';
@@ -14,7 +18,10 @@ import { Container } from './styles';
 const ContactForm: React.FC = () => {
   const { addToast, removeAllToasts } = useToasts();
   const navigate = useNavigate();
-
+  const contacts: IContact = useSelector(
+    (state: reducersType) => state.contacts,
+  );
+  const dispatch = useDispatch();
   async function registerNewLead({
     name,
     email,
@@ -30,7 +37,15 @@ const ContactForm: React.FC = () => {
       phone,
     });
 
-    if (response.status === 200 || response.status === 204) {
+    if (response.status === 204) {
+      dispatch(
+        addContact({
+          name,
+          email,
+          phone,
+        }),
+      );
+
       navigate('/detalhes');
       removeAllToasts();
       addToast('Informaçõoes salvas', {
@@ -46,9 +61,9 @@ const ContactForm: React.FC = () => {
   }
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
-      phone: '',
+      name: contacts.name || '',
+      email: contacts.email || '',
+      phone: contacts.phone || '',
     },
     validationSchema: yup.object({
       name: yup.string().required('O campo nome deve ser informado'),
