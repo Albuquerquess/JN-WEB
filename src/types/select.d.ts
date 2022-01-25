@@ -1,7 +1,7 @@
 export type IOption = {
   value: string;
   label: JSX.Element;
-  priceIndex: 1 | 2 | 3;
+  priceIndex: number;
 };
 
 export interface ISelectProps {

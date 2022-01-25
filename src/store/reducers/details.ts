@@ -7,7 +7,6 @@ export default function details(
   action: detailReduxAction,
 ): object {
   if (!action || !action.type) return {};
-  console.log('entrou');
   switch (action.type) {
     case 'ADD_COLOR_AND_TAMPONADE':
       return {

@@ -2,17 +2,17 @@ import React from 'react';
 
 import { Container } from './styles';
 
-interface ICartProps {
+interface IFurnitureCardProps {
   title: string;
   description: string | undefined;
   image: string | undefined;
-  children: React.ReactNode;
+  children: React.ReactNode | undefined;
 }
 
-const Card: React.FC<ICartProps> = ({
+const FurnitureCard: React.FC<IFurnitureCardProps> = ({
+  image,
   title,
   description,
-  image,
   children,
 }) => {
   return (
@@ -28,4 +28,4 @@ const Card: React.FC<ICartProps> = ({
   );
 };
 
-export default Card;
+export default FurnitureCard;

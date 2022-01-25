@@ -4,8 +4,8 @@ import { Container } from './styles';
 
 interface IInputProps {
   label: string;
-  type: string;
-  name: string;
+  type: string | undefined;
+  name: string | undefined;
   value: string;
   placeholder: string;
   onChangeValue: React.ChangeEventHandler<HTMLInputElement>;

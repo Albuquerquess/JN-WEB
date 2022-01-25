@@ -54,11 +54,6 @@ const Select: React.FC<ISelectProps> = ({
     }),
   };
 
-  console.log({
-    options,
-    defaultValue,
-  });
-
   return (
     <Container>
       <ReactSelect
