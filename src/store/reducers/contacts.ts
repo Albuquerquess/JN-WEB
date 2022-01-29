@@ -1,12 +1,17 @@
 import { ContactReduxAction } from '../../types/redux/contacts';
-import { CONTACT_INITIAL_STATE } from '../initialState';
+import { IAppStateContacts } from '../types';
+
+const init: IAppStateContacts = {
+  name: '',
+  email: '',
+  phone: '',
+};
 
 export default function contacts(
   // eslint-disable-next-line default-param-last
-  state = CONTACT_INITIAL_STATE,
-  action: ContactReduxAction,
+  state: IAppStateContacts = init,
+  action: any,
 ): object {
-  if (!action || !action.type) return {};
   switch (action.type) {
     case 'STORE_CONTACT':
       return {

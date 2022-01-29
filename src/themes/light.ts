@@ -4,6 +4,7 @@ export default {
     text: '#000000',
     textLight: '#ffffff',
     textAlert: '#AC0000',
+    textGreen: '#00D84F',
     cardBackground: '#EFEFEF',
     cardLine: '#707070',
     buttonInput: '#D5D5D5',

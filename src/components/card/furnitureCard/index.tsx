@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 
 import RotateButton from '../../../assets/svg/furnitureButtonIcon';
@@ -11,38 +11,12 @@ import {
   addFurniture,
   removeFurniture,
 } from '../../../store/actions/furnitures';
+import { IAppState, IAppStateFurniture } from '../../../store/types';
+import { IFurnitureCartProps } from '../../../types/furnitureCard';
 import { IOption } from '../../../types/select';
+import logger from '../../../utils/logger';
 import Select from '../../select';
 import { Container } from './styles';
-
-/**
- * 1. fazer o calculo do valor NO BACKEND
- */
-interface IVariation {
-  id: string;
-  variation_name: string;
-  variation_description: string;
-  variation_price_index: number;
-  variation_image: string;
-  furniture_id: string;
-  created_at: string;
-}
-
-interface IFurniture {
-  id: string;
-  furnitureName: string;
-}
-
-interface IRoom {
-  id: string;
-  name: string;
-}
-
-interface IFurnitureCartProps {
-  furniture: IFurniture;
-  variations: IVariation[];
-  room: IRoom;
-}
 
 const FurnitureCard: React.FC<IFurnitureCartProps> = ({
   furniture,
@@ -54,26 +28,16 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
   const [selected, setSelected] = React.useState(false);
   const { addToast, removeAllToasts } = useToasts();
 
-  const dispatch = useDispatch();
-  /*         
-  const furnitures: IFurniture = useSelector(
-    (state: reducersType) => state.furnitures,
-  ); */
+  const furnitureStored: IAppStateFurniture = useSelector(
+    (state: IAppState) => state.furnitures,
+  );
 
-  const options: IOption[] = variations.map((variation, index) => ({
-    value: String(index),
-    label: (
-      <div className="select-label">
-        {PriceIndex({ index: variation.variation_price_index })}
-        {variation.variation_name}
-      </div>
-    ),
-    priceIndex: Number(variation.variation_price_index),
-  }));
+  const dispatch = useDispatch();
 
   async function addSelectedFurniture() {
-    console.log(`
-    [FurnitureCard] addSelectedFurniture - 
+    logger.log(`
+    [FurnitureCard] addSelectedFurniture -
+    length: ${length}
     furnitureId: ${variations[currentVariation].furniture_id}
     variationId: ${variations[currentVariation].id}
     currentVariation: ${currentVariation}`);
@@ -93,7 +57,7 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
 
     const payload = {
       furniture_name: furniture.furnitureName,
-      room_name: 'RomoName',
+      room_name: room.name,
       variation_name: variations[currentVariation].variation_name,
     };
 
@@ -120,6 +84,42 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
     setSelected(false);
   }
 
+  function checkIftheFurnitureIsStored() {
+    const furnitureId = furniture.id;
+
+    if (furnitureStored.selected && furnitureId) {
+      const [furnitureIsStored] = furnitureStored.selected.filter(
+        furniture => furniture.furnitureId === furnitureId,
+      );
+
+      console.log(furnitureIsStored);
+
+      if (furnitureIsStored) {
+        const { variationId } = furnitureIsStored;
+
+        const currentVariationStoredIndex = variations.findIndex(
+          variation => variation.id === variationId,
+        );
+
+        if (currentVariationStoredIndex || currentVariationStoredIndex === 0) {
+          setSelected(true);
+          setCurrentVariation(currentVariationStoredIndex);
+          setLength(furnitureIsStored.length);
+        }
+      }
+    }
+  }
+  const options: IOption[] = variations.map((variation, index) => ({
+    value: String(index),
+    label: (
+      <div className="select-label">
+        {PriceIndex({ index: variation.variation_price_index })}
+        {variation.variation_name}
+      </div>
+    ),
+    priceIndex: Number(variation.variation_price_index),
+  }));
+
   const handleClick = () => {
     if (!selected) {
       addSelectedFurniture();
@@ -129,10 +129,9 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
   };
 
   React.useEffect(() => {
-    console.log(`
-    [FurnitureCard] FurnitureCard - 
-    currentVariation: ${currentVariation}`);
-  }, [currentVariation]);
+    checkIftheFurnitureIsStored();
+  }, []);
+
   /**
    * Criar um novo componente de card para tablet/desktop
    * Criar o price-preview (ver sobre criar rota no backend para calcular o preço)
@@ -155,11 +154,17 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
               <p>Selecione uma opção</p>
               <Select
                 options={options}
-                defaultValue={options[0]}
+                defaultValue={
+                  currentVariation
+                    ? options.filter(
+                        option => Number(option.value) === currentVariation,
+                      )[0]
+                    : options[0]
+                }
                 placeholder="Escolha uma opção"
                 menuDirection="auto"
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
                 setValue={(value: string) => setCurrentVariation(Number(value))}
+                disable={selected}
               />
             </label>
           )}

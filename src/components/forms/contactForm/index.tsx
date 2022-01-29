@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import URLs from '../../../helpers/URLs';
 import Api from '../../../services/api';
 import { addContact } from '../../../store/actions/contacts';
-import { reducersType } from '../../../store/reducers';
+import { IAppState } from '../../../store/types';
 import { IRegisterNewLeadProps } from '../../../types/forms/contacts';
 import { IContact } from '../../../types/redux/contacts';
 import Button from '../../button';
@@ -18,9 +18,7 @@ import { Container } from './styles';
 const ContactForm: React.FC = () => {
   const { addToast, removeAllToasts } = useToasts();
   const navigate = useNavigate();
-  const contacts: IContact = useSelector(
-    (state: reducersType) => state.contacts,
-  );
+  const contacts: IContact = useSelector((state: IAppState) => state.contacts);
   const dispatch = useDispatch();
   async function registerNewLead({
     name,

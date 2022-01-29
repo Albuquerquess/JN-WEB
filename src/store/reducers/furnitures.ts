@@ -1,18 +1,19 @@
-import { FURNITURE_INITIAL_STATE } from '../initialState';
-import furnituresTypes from '../types/furnitures';
+import furnituresTypes from '../reduxTypes/furnitures';
+import { IAppStateFurniture } from '../types';
+
+const init: IAppStateFurniture = {
+  selected: [],
+  room: {
+    id: '',
+    name: '',
+  },
+};
 
 export default function furnitures(
   // eslint-disable-next-line default-param-last
-  state = FURNITURE_INITIAL_STATE,
+  state: IAppStateFurniture = init,
   action: any,
-): object {
-  if (!action || !action.type) return {};
-
-  console.log(`
-  [reducer]furnitures - 
-  state: ${JSON.stringify(state)}
-  action: ${JSON.stringify(action)}`);
-
+): IAppStateFurniture {
   switch (action.type) {
     case furnituresTypes.addFurniture:
       return {
@@ -25,6 +26,9 @@ export default function furnitures(
             length: action.payload.length,
           },
         ],
+        room: {
+          ...state.room,
+        },
       };
 
     case furnituresTypes.removeFurniture:
@@ -32,6 +36,9 @@ export default function furnitures(
         selected: state.selected.filter(
           furniture => furniture.furnitureId !== action.payload.furnitureId,
         ),
+        room: {
+          ...state.room,
+        },
       };
 
     case furnituresTypes.addRoom:

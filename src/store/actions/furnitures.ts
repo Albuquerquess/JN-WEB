@@ -3,7 +3,7 @@ import {
   IRemoveFurniture,
   IRoom,
 } from '../../types/redux/furnitures';
-import furnituresTypes from '../types/furnitures';
+import furnituresTypes from '../reduxTypes/furnitures';
 
 export const addFurniture = (furniture: IFurniture) => ({
   type: furnituresTypes.addFurniture,

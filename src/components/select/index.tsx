@@ -11,11 +11,12 @@ const Select: React.FC<ISelectProps> = ({
   placeholder,
   setValue,
   menuDirection,
+  disable,
 }) => {
   const customStyles = {
     control: (base: any) => ({
       ...base,
-      background: '#909090',
+      background: disable ? '#dbdbdb' : '#909090',
       color: 'white',
       borderRadius: '.5em',
       boxShadow: null,
@@ -27,14 +28,14 @@ const Select: React.FC<ISelectProps> = ({
       ...base,
       borderRadius: 0,
       marginTop: 0,
-      background: '#909090',
+      background: disable ? '#909090' : '#909090',
       color: 'white',
       fontWeight: 'bold',
       fontSize: '14px',
     }),
     menuList: (base: any) => ({
       ...base,
-      background: '#909090',
+      background: disable ? '#909090' : '#909090',
       color: 'white',
       padding: 0,
       fontWeight: 'bold',
@@ -42,17 +43,22 @@ const Select: React.FC<ISelectProps> = ({
     }),
     placeholder: (base: any) => ({
       ...base,
-      background: '#909090',
+      background: disable ? '#909090' : '#909090',
       color: 'white',
       fontWeight: 'bold',
       fontSize: '14px',
     }),
     input: (base: any) => ({
       ...base,
-      background: '#909090',
+      background: disable ? '#909090' : '#909090',
       color: 'white',
     }),
   };
+
+  const sortedOptions = options.sort((a, b) =>
+    // eslint-disable-next-line no-nested-ternary
+    a.priceIndex > b.priceIndex ? 1 : b.priceIndex > a.priceIndex ? -1 : 0,
+  );
 
   return (
     <Container>
@@ -62,12 +68,14 @@ const Select: React.FC<ISelectProps> = ({
         className="react-select-container"
         classNamePrefix="react-select"
         placeholder={placeholder}
-        options={options}
+        options={sortedOptions}
         value={defaultValue}
         isMulti={false}
         components={{
           IndicatorSeparator: () => null,
         }}
+        isSearchable={false}
+        isDisabled={disable || false}
         onChange={target => target && setValue(target.value)}
       />
     </Container>

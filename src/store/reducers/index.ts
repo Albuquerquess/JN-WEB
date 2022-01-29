@@ -10,4 +10,4 @@ export const reducers = combineReducers({
   furnitures,
 });
 
-export type reducersType = ReturnType<typeof reducers>;
+export type IStorageState = ReturnType<typeof reducers>;

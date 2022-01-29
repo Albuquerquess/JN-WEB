@@ -1,5 +1,5 @@
 import { IColorAndTamponade } from '../../types/redux/detail';
-import detailTypes from '../types/details';
+import detailTypes from '../reduxTypes/details';
 
 export const addColorAndTamponade = (
   colorAndTamponade: IColorAndTamponade,

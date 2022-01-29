@@ -21,11 +21,21 @@ import { ISaveColorAndTamponadeSelectedProps } from '../../types/forms/details';
 import { IColorAndTamponade } from '../../types/redux/detail';
 import { Container } from './styles';
 
+/**
+ * Ver sobre a referência da informação de cor e
+ *  tamponamento dos cards da /detalhes
+ * Nos furnitureCards, verificar se ele já exise
+ *  dentro do storage
+ * Continuar a estilização do pricePreview para
+ * desktop
+ */
+
 const Details: React.FC = () => {
-  const colorAndTamponadeStored: IColorAndTamponade = useSelector(
+  const colorAndTamponadeStored: any = useSelector(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (state: any) => state.details.colorAndTamponade,
   );
+
   const [selectedColor, setSelectedColor] = React.useState(
     colorAndTamponadeStored?.colorId || '1',
   );
@@ -72,11 +82,13 @@ const Details: React.FC = () => {
       setColorsAndTamponades(colorsAndTamponadesFormated);
     } catch (error: AxiosError | unknown) {
       removeAllToasts();
+
       if (axios.isAxiosError(error)) {
         addToast('Ocorreu um erro ao buscar as informações!', {
           appearance: 'warning',
           autoDismiss: true,
         });
+
         addToast(error.response?.data.message, {
           appearance: 'warning',
           autoDismiss: false,
@@ -110,16 +122,18 @@ const Details: React.FC = () => {
       color_name: colorName,
       tamponade_name: tamponadeName,
     });
+
     dispatch(
       addColorAndTamponade({
         colorId,
         tamponadeId,
       }),
     );
-    console.log(response.status);
     if (response.status === 204) {
       navigate('/moveis');
+
       removeAllToasts();
+
       addToast('Informaçõoes salvas', {
         appearance: 'success',
         autoDismiss: true,

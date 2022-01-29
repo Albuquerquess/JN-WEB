@@ -12,7 +12,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const store: any = createStore(persistedReducer);
+const store = createStore(persistedReducer);
 
 const persistor = persistStore(store);
 
