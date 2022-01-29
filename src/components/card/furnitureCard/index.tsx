@@ -92,8 +92,6 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
         furniture => furniture.furnitureId === furnitureId,
       );
 
-      console.log(furnitureIsStored);
-
       if (furnitureIsStored) {
         const { variationId } = furnitureIsStored;
 
@@ -132,10 +130,6 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
     checkIftheFurnitureIsStored();
   }, []);
 
-  /**
-   * Criar um novo componente de card para tablet/desktop
-   * Criar o price-preview (ver sobre criar rota no backend para calcular o preço)
-   */
   return (
     <Container
       image={variations[currentVariation].variation_image}

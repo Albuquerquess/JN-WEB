@@ -10,7 +10,7 @@ export default createGlobalStyle`
     outline: 0;
   }
   div#root {
-    height: 100vh
+    min-height: 100vh
   }
 
   /* Scrollbar */
@@ -30,7 +30,7 @@ export default createGlobalStyle`
     /* End scrollbar */
 
   body {
-   
+
     background: #ffffff;
     color: #000000;
     -webkit-font-smoothing: antialiased;

@@ -174,63 +174,65 @@ const PricePreview: React.FC = () => {
 
   return (
     <Container isOpen={open}>
-      <main>
-        <p id="current-price">
-          <span id="current-price-preview">Preço atual:</span>{' '}
-          {amount.toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-          })}
-        </p>
-        <div id="price-preview-tools-wrapper">
-          <div className="price-preview-select-box">
-            <p>Cor</p>
-            {colorsAndTamponades && colorsAndTamponades.colors && (
-              <Select
-                menuDirection="top"
-                options={colorsAndTamponades.colors}
-                defaultValue={
-                  colorsAndTamponades.colors.filter(
-                    color => color.value === selectedColor,
-                  )[0]
-                }
-                placeholder="Escolha uma cor"
-                setValue={(value: string) => setSelectedColor(value)}
-              />
-            )}
+      <div id="price-preview-wrapper">
+        <main>
+          <p id="current-price">
+            <span id="current-price-preview">Preço atual:</span>{' '}
+            {amount.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </p>
+          <div id="price-preview-tools-wrapper">
+            <div className="price-preview-select-box">
+              <p>Cor</p>
+              {colorsAndTamponades && colorsAndTamponades.colors && (
+                <Select
+                  menuDirection="top"
+                  options={colorsAndTamponades.colors}
+                  defaultValue={
+                    colorsAndTamponades.colors.filter(
+                      color => color.value === selectedColor,
+                    )[0]
+                  }
+                  placeholder="Escolha uma cor"
+                  setValue={(value: string) => setSelectedColor(value)}
+                />
+              )}
+            </div>
+            <div className="price-preview-select-box">
+              <p>Tamponamento</p>
+              {colorsAndTamponades && colorsAndTamponades.colors && (
+                <Select
+                  menuDirection="top"
+                  options={colorsAndTamponades.tamponades}
+                  defaultValue={
+                    colorsAndTamponades.tamponades.filter(
+                      tamponade => tamponade.value === selectedTamponade,
+                    )[0]
+                  }
+                  placeholder="Escolha um tamponamento"
+                  setValue={(value: string) => setSelectedTamponade(value)}
+                />
+              )}
+            </div>
           </div>
-          <div className="price-preview-select-box">
-            <p>Tamponamento</p>
-            {colorsAndTamponades && colorsAndTamponades.colors && (
-              <Select
-                menuDirection="top"
-                options={colorsAndTamponades.tamponades}
-                defaultValue={
-                  colorsAndTamponades.tamponades.filter(
-                    tamponade => tamponade.value === selectedTamponade,
-                  )[0]
-                }
-                placeholder="Escolha um tamponamento"
-                setValue={(value: string) => setSelectedTamponade(value)}
-              />
-            )}
-          </div>
-        </div>
-      </main>
-      <aside>
-        <img
-          src={waterDrop}
-          onClick={() => setOpen(true)}
-          alt="Clique para abrir"
-          id="water-drop-icon"
-        />
-        <img
-          src={removeGreen}
-          onClick={() => setOpen(false)}
-          alt="Clique para fechar"
-          id="close-icon"
-        />
-      </aside>
+        </main>
+        <aside>
+          <img
+            src={waterDrop}
+            onClick={() => setOpen(true)}
+            alt="Clique para abrir"
+            id="water-drop-icon"
+          />
+          <img
+            src={removeGreen}
+            onClick={() => setOpen(false)}
+            alt="Clique para fechar"
+            id="close-icon"
+          />
+        </aside>
+      </div>
     </Container>
   );
 };
