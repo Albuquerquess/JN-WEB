@@ -2,6 +2,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { ProgressBar as Pg, Step } from 'react-step-progress-bar';
 
 import budgetActiveIcon from '../../assets/svg/budget - active.svg';
@@ -18,9 +19,17 @@ interface progressBarProps {
   porcent: number
 }
 
+const visiblePages = [
+  '/',
+  '/detalhes',
+  '/moveis',
+];
+
 const ProgressBar: React.FC<progressBarProps> = ({ porcent }) => {
+  const { pathname } = useLocation();
+
   return (
-    <Container>
+    <Container visible={visiblePages.includes(pathname)}>
       <Pg
         percent={porcent}
         filledBackground="#00d84f"

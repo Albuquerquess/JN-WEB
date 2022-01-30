@@ -2,11 +2,15 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles/breakpoints';
 
-export const Container = styled.div`
+interface IStyleProgressBarProps {
+  visible: boolean;
+}
+
+export const Container = styled.div<IStyleProgressBarProps>`
   width: 100%;
 
-  display: flex;
-  align: center;
+  display: ${props => (props.visible ? 'flex' : 'none')};
+  align-items: center;
   justify-content: center;
   margin-bottom: 3em;
 

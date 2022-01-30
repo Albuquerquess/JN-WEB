@@ -7,6 +7,7 @@ export const Container = styled.div`
   h1#title {
     font-size: 2.2em;
     margin-bottom: 10px;
+    font-weight: bold;
   }
 
   h2#subtitle {
