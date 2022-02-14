@@ -21,6 +21,7 @@ import {
   ITamponadeResponse,
 } from '../../types/details';
 import { ISaveColorAndTamponadeSelectedProps } from '../../types/forms/details';
+import logger from '../../utils/logger';
 import Select from '../select';
 import { Container } from './styles';
 
@@ -48,27 +49,34 @@ const PricePreview: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const variations = furnituresStored.selected.map(furniture => {
-    return {
-      variationId: furniture.variationId,
-      length: furniture.length,
-    };
-  });
-
   async function calculateBudgetAmount() {
     try {
-      const params = {
-        variations: JSON.stringify(variations),
-        colorId: selectedColor,
-        tamponadeId: selectedTamponade,
-      };
+      const furnituresByCurrentRoom = furnituresStored.selected.filter(
+        selected => selected.roomId === furnituresStored.room.id,
+      );
 
-      const response = await Api.get(URLs.calculateBudgetAmount, {
-        params,
-      });
+      if (furnituresByCurrentRoom.length > 0) {
+        const variations = furnituresByCurrentRoom.map(furniture => {
+          return {
+            variationId: furniture.variationId,
+            length: furniture.length,
+          };
+        });
+        const params = {
+          variations: JSON.stringify(variations),
+          colorId: selectedColor,
+          tamponadeId: selectedTamponade,
+        };
 
-      setAmount(response.data);
+        const response = await Api.get(URLs.calculateBudgetAmount, {
+          params,
+        });
+        setAmount(response.data);
+      } else {
+        setAmount(0);
+      }
     } catch (error) {
+      logger.log('calculateBudgetAmount', error);
       alert(
         'Não foi possível gerar o orçamento prévio. Por favor, contate o suporte ou tente mais tarde.',
       );

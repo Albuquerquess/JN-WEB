@@ -23,6 +23,7 @@ const visiblePages = [
   '/',
   '/detalhes',
   '/moveis',
+  '/orçamento'
 ];
 
 const ProgressBar: React.FC<progressBarProps> = ({ porcent }) => {

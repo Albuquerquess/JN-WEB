@@ -41,14 +41,14 @@ const Furnitures: React.FC = () => {
     try {
       const response = await Api.get(URLs.getFurnitures, {
         params: {
-          room_id: 4,
+          room_id: 3,
         },
       });
 
       if (response.status === 200) {
         logger.log('getFurnituresByRoom', response.data);
 
-        const { roomId, roomName } = response.data.room;
+        const { id: roomId, name: roomName } = response.data.room;
 
         setFurnitures(response.data);
 

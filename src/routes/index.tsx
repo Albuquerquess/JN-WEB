@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes as R } from 'react-router-dom';
 
+import Budget from '../pages/budget';
 import Contacts from '../pages/contacts';
 import Details from '../pages/details';
 import Furnitures from '../pages/furnitures';
@@ -13,6 +14,7 @@ const MainRoutes: React.FC = () => {
       <Route path="/detalhes" element={<Details />} />
       <Route path="/moveis" element={<Furnitures />} />
       <Route path="/video" element={<Video />} />
+      <Route path="/orcamento" element={<Budget />} />
     </R>
   );
 };

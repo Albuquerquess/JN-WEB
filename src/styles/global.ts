@@ -15,17 +15,17 @@ export default createGlobalStyle`
 
   /* Scrollbar */
   body::-webkit-scrollbar {
-    width: 6px;               /* width of the entire scrollbar */
+    width: 6px;
     height: 0;
   }
 
   body::-webkit-scrollbar-track {
-    background: #D5D5D5;        /* color of the tracking area */
+    background: #D5D5D5;
   }
 
   body::-webkit-scrollbar-thumb {
-    background-color: #DDDDDD;    /* color of the scroll thumb */
-    border-radius: 6px;       /* roundness of the scroll thumb */
+    background-color: #DDDDDD;
+    border-radius: 6px;
   }
     /* End scrollbar */
 

@@ -181,9 +181,9 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
             className="furniture-card-button"
           >
             <RotateButton selected={selected} />
-            <span className="furniture-card-button-label">
+            <p className="furniture-card-button-label">
               {selected ? 'Remover' : 'Adicionar'}
-            </span>
+            </p>
           </button>
         </div>
       </section>

@@ -8,7 +8,6 @@ interface IStyleCardProps {
 
 export const Container = styled.div<IStyleCardProps>`
   width: 100%;
-  min-height: 44em;
   max-height: 100%;
 
   background: #efefef;
@@ -47,7 +46,7 @@ export const Container = styled.div<IStyleCardProps>`
 
   @media screen and (min-width: ${breakpoints.md}) {
     width: 48%;
-    height: 70.8em;
+    height: 58em;
 
     section.card-header {
       height: 59.04%;

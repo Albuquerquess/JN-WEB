@@ -12,28 +12,18 @@ import PriceIndex from '../../helpers/priceIndex';
 import URLs from '../../helpers/URLs';
 import Api from '../../services/api';
 import { addColorAndTamponade } from '../../store/actions/details';
+import { IAppState } from '../../store/types';
 import {
   IColorResponse,
   IColorsAndTamponades,
   ITamponadeResponse,
 } from '../../types/details';
 import { ISaveColorAndTamponadeSelectedProps } from '../../types/forms/details';
-import { IColorAndTamponade } from '../../types/redux/detail';
 import { Container } from './styles';
 
-/**
- * Ver sobre a referência da informação de cor e
- *  tamponamento dos cards da /detalhes
- * Nos furnitureCards, verificar se ele já exise
- *  dentro do storage
- * Continuar a estilização do pricePreview para
- * desktop
- */
-
 const Details: React.FC = () => {
-  const colorAndTamponadeStored: any = useSelector(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (state: any) => state.details.colorAndTamponade,
+  const colorAndTamponadeStored = useSelector(
+    (state: IAppState) => state.details.colorAndTamponade,
   );
 
   const [selectedColor, setSelectedColor] = React.useState(
@@ -84,10 +74,13 @@ const Details: React.FC = () => {
       removeAllToasts();
 
       if (axios.isAxiosError(error)) {
-        addToast('Ocorreu um erro ao buscar as informações!', {
-          appearance: 'warning',
-          autoDismiss: true,
-        });
+        addToast(
+          'Ocorreu um erro ao buscar as informações. Por favor, tente novamente!',
+          {
+            appearance: 'warning',
+            autoDismiss: true,
+          },
+        );
 
         addToast(error.response?.data.message, {
           appearance: 'warning',
@@ -163,7 +156,7 @@ const Details: React.FC = () => {
         >
           {colorsAndTamponades && colorsAndTamponades.colors && (
             <Select
-              menuDirection="top"
+              menuDirection="auto"
               options={colorsAndTamponades.colors}
               defaultValue={
                 colorsAndTamponades.colors.filter(
@@ -182,7 +175,7 @@ const Details: React.FC = () => {
         >
           {colorsAndTamponades && colorsAndTamponades.colors && (
             <Select
-              menuDirection="top"
+              menuDirection="auto"
               options={colorsAndTamponades.tamponades}
               defaultValue={
                 colorsAndTamponades.tamponades.filter(

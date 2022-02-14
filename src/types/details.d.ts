@@ -13,6 +13,11 @@ export interface ITamponadeResponse {
   price_index: 1 | 2 | 3;
 }
 
+export interface IColorsAndTamponadesResponse {
+  colors: IColorResponse[];
+  tamponades: ITamponadeResponse[];
+}
+
 export interface IColorsAndTamponades {
   colors: IOption[];
   tamponades: IOption[];

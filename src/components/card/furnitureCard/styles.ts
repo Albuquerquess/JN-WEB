@@ -37,6 +37,7 @@ export const Container = styled.div<IStyleCardProps>`
 
     div.furniture-card-info-wrapper {
       margin-bottom: 2em;
+      width: 100%;
 
       h3 {
         font-size: 1.4em;
@@ -96,14 +97,14 @@ export const Container = styled.div<IStyleCardProps>`
     justify-content: center;
 
     & > svg {
-      height: calc(100% - 1.2em);
+      height: calc(100% - 11px);
       width: auto;
-      padding-right: 1.4em;
+      margin-right: 20px;
       transform: rotate(${props => (props.selected ? '135deg' : '0deg')});
       transition: 0.4s ease;
     }
 
-    span.furniture-card-button-label {
+    p.furniture-card-button-label {
       font-size: 20px;
       font-weight: bold;
       color: #ffffff;
@@ -134,6 +135,7 @@ export const Container = styled.div<IStyleCardProps>`
     section.furniture-card-body {
       height: 100%;
       min-height: 46.4em;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -156,6 +158,7 @@ export const Container = styled.div<IStyleCardProps>`
       }
 
       div.furniture-card-tools-wrapper {
+        width: 100%;
         label.furniture-card-input-box > p,
         label.furniture-card-select-box > p {
           font-size: 24px;

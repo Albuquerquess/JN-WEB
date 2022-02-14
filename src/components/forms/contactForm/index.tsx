@@ -20,6 +20,7 @@ const ContactForm: React.FC = () => {
   const navigate = useNavigate();
   const contacts: IContact = useSelector((state: IAppState) => state.contacts);
   const dispatch = useDispatch();
+
   async function registerNewLead({
     name,
     email,
@@ -57,6 +58,7 @@ const ContactForm: React.FC = () => {
       });
     }
   }
+
   const formik = useFormik({
     initialValues: {
       name: contacts.name || '',

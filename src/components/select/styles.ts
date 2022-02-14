@@ -12,7 +12,11 @@ export const Container = styled.div`
   }
   div.react-select__menu,
   div.react-select__menu-list {
-    border-radius: 0 0 0.5em 0.5em;
+    border-radius: 0.5em;
+  }
+
+  div.react-select__menu {
+    margin-top: 8px;
   }
 
   div.react-select__option {
