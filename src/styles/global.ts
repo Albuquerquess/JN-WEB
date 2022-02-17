@@ -72,6 +72,11 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+  p, span {
+    font-size: 1.2em;
+    letter-spacing: 0.22px;
+    line-height: 20px;
+  }
 
 
 `;

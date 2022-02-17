@@ -5,6 +5,7 @@ import { ToastProvider } from 'react-toast-notifications';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import Box from './components/box';
+import Footer from './components/footer';
 import Header from './components/header';
 import ProgressBar from './components/progressBar';
 import Routes from './routes';
@@ -20,11 +21,12 @@ const App = () => {
           <ToastProvider placement="top-right">
             <Themes>
               <GlobalStyle />
+              <Header />
               <Box>
-                <Header />
                 <ProgressBar porcent={80} />
                 <Routes />
               </Box>
+              <Footer />
             </Themes>
           </ToastProvider>
         </PersistGate>

@@ -19,5 +19,6 @@ export default {
     pricePreviewFinal: '#404040',
     iconBackground: '#00D84F',
     subtitle: '#707070',
+    copyRight: '#D5D5D5',
   },
 };

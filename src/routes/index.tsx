@@ -10,6 +10,10 @@ import Thanks from '../pages/thanks';
 import Video from '../pages/video';
 
 const MainRoutes: React.FC = () => {
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <R>
       <Route path="/" element={<Rooms />} />
