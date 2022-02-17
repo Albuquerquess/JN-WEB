@@ -20,7 +20,7 @@ const Video: React.FC = () => {
         allowFullScreen
         id="video-youtube-iframe"
       />
-      <Button navigateTo="/orcamento" />
+      <Button navigateTo="/resumo" />
     </Container>
   );
 };

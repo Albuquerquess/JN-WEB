@@ -5,6 +5,7 @@ const URLs = {
   furnituresSave: '/furnitures/selected/save',
   calculateBudgetAmount: '/variations/amount',
   getFurnituresInfos: '/budget/furnitures/info',
+  getRooms: '/rooms/index',
   getFurnitures: '/furnitures/room/index',
   generateBudgetPDF: '/budget',
 };

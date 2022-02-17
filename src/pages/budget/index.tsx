@@ -145,7 +145,7 @@ const Budget: React.FC = () => {
           appearance: 'warning',
           autoDismiss: true,
           onDismiss: () => {
-            window.location.reload();
+            setTimeout(() => window.location.reload(), 2000);
           },
         },
       );
@@ -255,19 +255,19 @@ const Budget: React.FC = () => {
                   Características gerais dos móveis
                 </h2>
                 <p className="budget-text">
-                  <strong>Cor:</strong>
+                  <strong>Cor: </strong>
                   {budgetData.details.colorName}
                 </p>
                 <p className="budget-text">
-                  <strong>Tamponamento:</strong>
+                  <strong>Tamponamento: </strong>
                   {budgetData.details.tamponadeName}
                 </p>
                 <p className="budget-text">
-                  <strong>Ferragens:</strong>
+                  <strong>Ferragens: </strong>
                   Blum e Cermag
                 </p>
                 <p className="budget-text">
-                  <strong>Garatia:</strong>
+                  <strong>Garatia: </strong>
                   Vitalicia
                 </p>
               </section>

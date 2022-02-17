@@ -9,7 +9,7 @@ interface IFurnitureCardProps {
   children: React.ReactNode | undefined;
 }
 
-const FurnitureCard: React.FC<IFurnitureCardProps> = ({
+const Card: React.FC<IFurnitureCardProps> = ({
   image,
   title,
   description,
@@ -28,4 +28,4 @@ const FurnitureCard: React.FC<IFurnitureCardProps> = ({
   );
 };
 
-export default FurnitureCard;
+export default Card;

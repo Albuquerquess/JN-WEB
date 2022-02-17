@@ -34,6 +34,7 @@ const Furnitures: React.FC = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const roomData = useSelector((state: IAppState) => state.furnitures.room);
 
   const furnituresStored = useSelector((state: IAppState) => state.furnitures);
 
@@ -41,7 +42,7 @@ const Furnitures: React.FC = () => {
     try {
       const response = await Api.get(URLs.getFurnitures, {
         params: {
-          room_id: 3,
+          room_id: roomData.id,
         },
       });
 
