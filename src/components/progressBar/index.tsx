@@ -20,19 +20,28 @@ interface progressBarProps {
 }
 
 const visiblePages = [
-  '/',
-  '/detalhes',
-  '/moveis',
-  '/orçamento'
+  'contato',
+  'detalhes',
+  'moveis',
+  'resumo'
 ];
 
-const ProgressBar: React.FC<progressBarProps> = ({ porcent }) => {
+const steps: {[key: string]: number} = {
+  'contato': 0,
+  'detalhes': 34,
+  'moveis': 67,
+  'resumo': 100
+};
+
+const ProgressBar: React.FC<progressBarProps> = () => {
   const { pathname } = useLocation();
+  const pathnameFormated = pathname.slice(1);
+  const percent: number = steps[pathnameFormated];
 
   return (
-    <Container visible={visiblePages.includes(pathname)}>
+    <Container visible={visiblePages.includes(pathnameFormated)}>
       <Pg
-        percent={porcent}
+        percent={percent}
         filledBackground="#00d84f"
         stepPositions={4}
       >

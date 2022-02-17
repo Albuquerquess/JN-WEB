@@ -8,6 +8,7 @@ import Box from './components/box';
 import Footer from './components/footer';
 import Header from './components/header';
 import ProgressBar from './components/progressBar';
+import ScrollToTop from './helpers/scrollToTop';
 import Routes from './routes';
 import { persistor, store } from './store';
 import GlobalStyle from './styles/global';
@@ -23,6 +24,7 @@ const App = () => {
               <GlobalStyle />
               <Header />
               <Box>
+                <ScrollToTop />
                 <ProgressBar porcent={80} />
                 <Routes />
               </Box>

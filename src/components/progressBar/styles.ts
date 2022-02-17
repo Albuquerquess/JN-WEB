@@ -29,6 +29,8 @@ export const Container = styled.div<IStyleProgressBarProps>`
       height: 0.2em;
       position: absolute;
       z-index: -1;
+
+      transition: width 1s;
     }
 
     div.RSPBstep > img {
