@@ -22,8 +22,8 @@ const App = () => {
           <ToastProvider placement="top-right">
             <Themes>
               <GlobalStyle />
-              <Header />
               <Box>
+                <Header />
                 <ScrollToTop />
                 <ProgressBar porcent={80} />
                 <Routes />
