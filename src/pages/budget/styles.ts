@@ -137,7 +137,6 @@ export const Container = styled.div`
     main#budget {
       display: flex;
       flex-direction: row;
-      align-items: flex-end;
       justify-content: space-between;
 
       section#budget-infos {
