@@ -74,8 +74,7 @@ export default createGlobalStyle`
   }
   p, span {
     font-size: 1.2em;
-    letter-spacing: 0.22px;
-    line-height: 20px;
+    line-height: 125%;
   }
 
 

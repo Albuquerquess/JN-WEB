@@ -38,6 +38,7 @@ export const Container = styled.div<IStyleFooterProps>`
 
     & > p {
       text-align: center;
+      line-height: 15px;
     }
 
     section#footer-icons {
@@ -66,6 +67,8 @@ export const Container = styled.div<IStyleFooterProps>`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    line-height: 15px;
   }
 
   @media screen and (min-width: ${breakpoints.md}) {
@@ -87,6 +90,7 @@ export const Container = styled.div<IStyleFooterProps>`
     }
 
     section#footer-copy-right {
+      line-height: 15px;
       & > p,
       & > span#devs > p {
         font-size: 1.4em;

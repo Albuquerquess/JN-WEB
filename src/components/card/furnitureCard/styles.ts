@@ -46,6 +46,7 @@ export const Container = styled.div<IStyleCardProps>`
 
       p {
         font-size: 1.2em;
+        line-height: 18px;
       }
     }
 

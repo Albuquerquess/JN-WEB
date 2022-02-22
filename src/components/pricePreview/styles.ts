@@ -108,24 +108,6 @@ export const Container = styled.div<IStylePricePreview>`
     }
   }
 
-  /*   @media screen and (min-width: 1440px) {
-    div#price-preview-wrapper {
-      main {
-        p#current-price {
-          font-size: 24px;
-        }
-
-        div#price-preview-tools-wrapper {
-          div.price-preview-select-box {
-            & > p {
-              font-size: 24px;
-            }
-          }
-        }
-      }
-    }
-  } */
-
   @media screen and (min-width: ${breakpoints.xl}) {
     height: 100px;
     div#price-preview-wrapper {
@@ -163,6 +145,10 @@ export const Container = styled.div<IStylePricePreview>`
               font-size: 32px;
               margin-right: 20px;
               margin-bottom: 0;
+            }
+
+            div.react-select__control {
+              width: 320px;
             }
           }
 

@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
             <img src={instagramLogo} alt="Acesse o instagram" />
           </a>
           <a
-            href="https://pt-br.facebook.com/jnmoveisplanejados.rn/"
+            href="https://www.youtube.com/channel/UClKGQJEtRqvzZr7GhzAnWCg"
             target="_blank"
             rel="noreferrer"
           >

@@ -38,7 +38,7 @@ const Rooms: React.FC = () => {
         }),
       );
 
-      navigate('contato');
+      navigate('/contato');
     }
   }
 
