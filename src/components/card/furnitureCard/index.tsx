@@ -6,7 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import RotateButton from '../../../assets/svg/furnitureButtonIcon';
 import PriceIndex from '../../../helpers/priceIndex';
 import URLs from '../../../helpers/URLs';
-import Api from '../../../services/api';
+import { Api } from '../../../services/api';
 import {
   addFurniture,
   removeFurniture,

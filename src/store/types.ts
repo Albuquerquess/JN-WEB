@@ -41,9 +41,23 @@ export interface IAppStateContacts {
   phone: string;
 }
 
+/* Admin */
+export interface IAppStateAdmin {
+  authData: {
+    username: string;
+    password: string;
+  };
+  user: {
+    name: string;
+    siteOwner: string;
+  };
+  token: string;
+}
+
 /* State */
 export interface IAppState {
   furnitures: IAppStateFurniture;
   details: IAppStateDetails;
   contacts: IAppStateContacts;
+  admin: IAppStateAdmin;
 }

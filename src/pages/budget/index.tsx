@@ -10,7 +10,7 @@ import downloadIcon from '../../assets/svg/download.svg';
 import Button from '../../components/button';
 import Title from '../../components/title';
 import URLs from '../../helpers/URLs';
-import Api from '../../services/api';
+import { Api } from '../../services/api';
 import { IAppState, IAppStateContacts } from '../../store/types';
 import { IFurnitureStorage } from '../../store/types/rooms';
 import { Container } from './styles';

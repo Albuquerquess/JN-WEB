@@ -8,7 +8,7 @@ import Button from '../../components/button';
 import Card from '../../components/card';
 import Title from '../../components/title';
 import URLs from '../../helpers/URLs';
-import Api from '../../services/api';
+import { Api } from '../../services/api';
 import { addRoom } from '../../store/actions/furnitures';
 import logger from '../../utils/logger';
 import { Container } from './styles';

@@ -6,7 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import * as yup from 'yup';
 
 import URLs from '../../../helpers/URLs';
-import Api from '../../../services/api';
+import { Api } from '../../../services/api';
 import { addContact } from '../../../store/actions/contacts';
 import { IAppState } from '../../../store/types';
 import { IRegisterNewLeadProps } from '../../../types/forms/contacts';

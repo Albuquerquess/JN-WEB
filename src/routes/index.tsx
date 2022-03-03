@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link, Route, Routes as R } from 'react-router-dom';
+import { Route, Routes as R } from 'react-router-dom';
 
+import Login from '../pages/admin/login';
+import AdminRooms from '../pages/admin/rooms';
 import Budget from '../pages/budget';
 import Contacts from '../pages/contacts';
 import Details from '../pages/details';
@@ -8,6 +10,7 @@ import Furnitures from '../pages/furnitures';
 import Rooms from '../pages/rooms';
 import Thanks from '../pages/thanks';
 import Video from '../pages/video';
+import ProtectedRoutes from './protectedRoutes';
 
 const MainRoutes: React.FC = () => {
   return (
@@ -20,6 +23,17 @@ const MainRoutes: React.FC = () => {
       <Route path="resumo" element={<Budget />} />
       <Route path="video" element={<Video />} />
       <Route path="obrigado" element={<Thanks />} />
+      <Route path="admin">
+        <Route index element={<Login />} />
+        <Route
+          path="ambientes"
+          element={
+            <ProtectedRoutes redirectTo="/admin">
+              <AdminRooms />
+            </ProtectedRoutes>
+          }
+        />
+      </Route>
       <Route path="*" element={<h1>Página não encontrada</h1>} />
     </R>
   );

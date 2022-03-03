@@ -12,7 +12,7 @@ import removeGreen from '../../assets/svg/remove-green.svg';
 import waterDrop from '../../assets/svg/waterDrop.svg';
 import PriceIndex from '../../helpers/priceIndex';
 import URLs from '../../helpers/URLs';
-import Api from '../../services/api';
+import { Api } from '../../services/api';
 import { addColorAndTamponade } from '../../store/actions/details';
 import { IAppState } from '../../store/types';
 import {

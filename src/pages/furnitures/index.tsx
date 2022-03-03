@@ -9,7 +9,7 @@ import FurnitureCard from '../../components/card/furnitureCard';
 import PricePreview from '../../components/pricePreview';
 import Title from '../../components/title';
 import URLs from '../../helpers/URLs';
-import Api from '../../services/api';
+import { Api } from '../../services/api';
 import { addRoom } from '../../store/actions/furnitures';
 import { IAppState } from '../../store/types';
 import { IVariation } from '../../types/furnitureCard';

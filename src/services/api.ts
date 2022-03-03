@@ -1,7 +1,24 @@
 import axios from 'axios';
 
-const Api = axios.create({
+import Response from './response';
+
+export const Api = axios.create({
   baseURL: process.env.REACT_APP_WEB_API,
 });
 
-export default Api;
+class Requests {
+  async authAdmin(username: string, password: string) {
+    try {
+      const response = await Api.post('admin/auth', {
+        username,
+        password,
+      });
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+}
+
+export default new Requests();
