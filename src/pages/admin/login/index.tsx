@@ -59,7 +59,7 @@ const Login: React.FC = () => {
       },
     );
 
-    navigate('ambientes');
+    navigate('admin');
   };
 
   const formik = useFormik({
@@ -90,7 +90,7 @@ const Login: React.FC = () => {
 
   React.useEffect(() => {
     if (token) {
-      navigate('ambientes');
+      navigate('/admin');
     }
   }, []);
 

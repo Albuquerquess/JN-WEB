@@ -24,11 +24,11 @@ const MainRoutes: React.FC = () => {
       <Route path="video" element={<Video />} />
       <Route path="obrigado" element={<Thanks />} />
       <Route path="admin">
-        <Route index element={<Login />} />
+        <Route path="login" element={<Login />} />
         <Route
-          path="ambientes"
+          index
           element={
-            <ProtectedRoutes redirectTo="/admin">
+            <ProtectedRoutes redirectTo="login">
               <AdminRooms />
             </ProtectedRoutes>
           }
