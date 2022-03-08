@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 interface IResponse {
   error: boolean;
   data: any | null;
-  message: string[] | null;
+  messages: string[] | null;
   additionalInfo: string[] | null;
 }
 
@@ -12,25 +12,26 @@ class Response {
     return {
       error: false,
       data: response.data,
-      message: null,
+      messages: null,
       additionalInfo: null,
     };
   }
   bad(error: any): IResponse {
     if (error.isAxiosError) {
-      const message = error.response.data;
+      console.log(error);
+      const { messages } = error.response.data;
       const additionalInfo = error.response.data;
       return {
         error: true,
         data: null,
-        message,
+        messages,
         additionalInfo,
       };
     }
     return {
       error: true,
       data: null,
-      message: ['Ops, ocorreu um erro interno. Por favor, tente novamente!'],
+      messages: ['Ops, ocorreu um erro interno. Por favor, tente novamente!'],
       additionalInfo: null,
     };
   }

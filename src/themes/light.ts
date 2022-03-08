@@ -12,6 +12,7 @@ export default {
     buttonRed: '#AC0000',
     buttonLight: '#00D84F',
     buttonNormal: '#00A44C',
+    buttonGray: '#D5D5D5',
     cardInput: '#DDDDDD',
     footer: '#EFEFEF',
     copy: '#D5D5D5',

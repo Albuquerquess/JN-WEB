@@ -37,7 +37,7 @@ const Login: React.FC = () => {
 
     removeAllToasts();
     if (auth.error) {
-      addToast(auth.message || 'Ocorreu um erro!', {
+      addToast(auth.messages || 'Ocorreu um erro!', {
         appearance: 'error',
         autoDismiss: true,
       });

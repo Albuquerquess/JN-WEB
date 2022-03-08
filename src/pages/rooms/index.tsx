@@ -23,7 +23,7 @@ const Rooms: React.FC = () => {
   const navigate = useNavigate();
 
   const [rooms, setRooms] = React.useState<IResponseGetRooms[]>([]);
-  const { addToast, removeAllToasts } = useToasts();
+  const { addToast } = useToasts();
 
   function handleClick(roomId: number, roomName: string) {
     logger.log(
