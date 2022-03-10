@@ -9,11 +9,22 @@ import { Container } from './styles';
 interface IPropsItem {
   name: string;
   id: number;
+  status: boolean;
   type: 'room' | 'furniture' | 'variation';
+  refresh: boolean;
   setRefresh(value: boolean): void;
+  handleClick(): void;
 }
 
-const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
+const Item: React.FC<IPropsItem> = ({
+  id,
+  name,
+  type,
+  setRefresh,
+  refresh,
+  status,
+  handleClick,
+}) => {
   const { addToast } = useToasts();
   const typeFormated = {
     room: 'Ambiente',
@@ -23,8 +34,8 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
 
   const room = {
     del: Requests.deleteRoom,
-    enable: Requests.updateRoom,
-    disable: Requests.deleteRoom,
+    enable: Requests.updateRoomStatus,
+    disable: Requests.updateRoomStatus,
   };
 
   const furniture = {
@@ -62,7 +73,7 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
         autoDismiss: true,
       });
     }
-    setRefresh(true);
+    setRefresh(!refresh);
   }
 
   async function enable() {
@@ -70,7 +81,7 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
 
     switch (type) {
       case 'room':
-        updated = await room.enable({ id, status: true });
+        updated = await room.enable({ id, status: 'enable' });
         break;
 
       default:
@@ -83,7 +94,7 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
         autoDismiss: true,
       });
     } else {
-      addToast(`${typeFormated[type]} Ativado(a)/desativado(a) com sucesso!`, {
+      addToast(`${typeFormated[type]} Ativado(a) com sucesso!`, {
         appearance: 'success',
         autoDismiss: true,
       });
@@ -95,7 +106,8 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
 
     switch (type) {
       case 'room':
-        updated = await room.enable({ id, status: false });
+        updated = await room.enable({ id, status: 'disable' });
+
         break;
 
       default:
@@ -108,15 +120,21 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
         autoDismiss: true,
       });
     } else {
-      addToast(`${typeFormated[type]} Ativado(a)/desativado(a) com sucesso!`, {
+      addToast(`${typeFormated[type]} desativado(a) com sucesso!`, {
         appearance: 'success',
         autoDismiss: true,
       });
     }
   }
 
+  function handleItemClick() {
+    if (handleClick) {
+      handleClick();
+    }
+  }
+
   return (
-    <Container>
+    <Container onClick={() => handleItemClick()}>
       <p className="title">{name}</p>
       <TrashButton
         handleClick={() => {
@@ -124,6 +142,7 @@ const Item: React.FC<IPropsItem> = ({ id, name, type, setRefresh }) => {
         }}
       />
       <SwitchButtom
+        status={status}
         handleOnActivate={() => {
           enable();
         }}

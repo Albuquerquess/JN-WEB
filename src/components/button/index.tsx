@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { IButtonProps } from '../../types/button';
 import { Container } from './styles';
 
-const Button: React.FC<IButtonProps> = ({ label, navigateTo, handleClick }) => {
+const Button: React.FC<IButtonProps> = ({
+  color,
+  label,
+  background,
+  navigateTo,
+  handleClick,
+}) => {
   const navigate = useNavigate();
 
   function handle() {
@@ -15,7 +21,7 @@ const Button: React.FC<IButtonProps> = ({ label, navigateTo, handleClick }) => {
     }
   }
   return (
-    <Container onClick={() => handle()}>
+    <Container onClick={() => handle()} background={background} color={color}>
       <span id="text">{label || 'Continuar'}</span>
     </Container>
   );

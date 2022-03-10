@@ -3,13 +3,12 @@ import ReactSwitch from 'react-switch';
 
 import { ISwitchProps } from '../../types/button';
 
-// import { Container } from './styles';
-
 const SwitchButtom: React.FC<ISwitchProps> = ({
   handleOnActivate,
   handleOnDisable,
+  status,
 }) => {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState(status);
 
   function handle() {
     if (!checked) {

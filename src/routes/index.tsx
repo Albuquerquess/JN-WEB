@@ -2,7 +2,8 @@ import React from 'react';
 import { Route, Routes as R } from 'react-router-dom';
 
 import Login from '../pages/admin/login';
-import AdminRooms from '../pages/admin/rooms';
+import CreateRoom from '../pages/admin/rooms/create';
+import AdminRooms from '../pages/admin/rooms/list';
 import Budget from '../pages/budget';
 import Contacts from '../pages/contacts';
 import Details from '../pages/details';
@@ -24,15 +25,33 @@ const MainRoutes: React.FC = () => {
       <Route path="video" element={<Video />} />
       <Route path="obrigado" element={<Thanks />} />
       <Route path="admin">
-        <Route path="login" element={<Login />} />
-        <Route
-          index
-          element={
-            <ProtectedRoutes redirectTo="login">
-              <AdminRooms />
-            </ProtectedRoutes>
-          }
-        />
+        <Route index element={<Login />} />
+        <Route path="ambientes">
+          <Route
+            index
+            element={
+              <ProtectedRoutes redirectTo="/admin">
+                <AdminRooms />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="criar"
+            element={
+              <ProtectedRoutes redirectTo="/admin">
+                <CreateRoom />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path=":roomId"
+            element={
+              <ProtectedRoutes redirectTo="/admin">
+                <CreateRoom />
+              </ProtectedRoutes>
+            }
+          />
+        </Route>
       </Route>
       <Route path="*" element={<h1>Página não encontrada</h1>} />
     </R>

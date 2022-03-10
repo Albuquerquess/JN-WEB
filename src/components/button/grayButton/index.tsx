@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { IButtonProps } from '../../types/button';
+import { IButtonProps } from '../../../types/button';
 import { Container } from './styles';
 
 const GrayButton: React.FC<IButtonProps> = ({
@@ -19,8 +19,8 @@ const GrayButton: React.FC<IButtonProps> = ({
     }
   }
   return (
-    <Container onClick={() => handle()}>
-      <span id="text">{label || 'Adicionar ambiente'}</span>
+    <Container className="gray-button" onClick={() => handle()}>
+      <span id="text">{label || 'Adicionar'}</span>
     </Container>
   );
 };

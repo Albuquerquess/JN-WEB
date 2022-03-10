@@ -29,6 +29,10 @@ export default createGlobalStyle`
   }
     /* End scrollbar */
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
 
     background: #ffffff;
