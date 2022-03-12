@@ -1,21 +1,20 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useResolvedPath,
-} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import Button from '../../../../components/button';
+import GrayButton from '../../../../components/button/grayButton';
 import ImageButton from '../../../../components/button/imageButton';
 import Grid from '../../../../components/grid';
 import GrayInput from '../../../../components/input/grayInput';
 import GrayTextarea from '../../../../components/input/grayTextarea';
+import Item from '../../../../components/item';
 import LowLabel from '../../../../components/label/low';
-import Title from '../../../../components/title';
+import Medium from '../../../../components/label/medium';
+import Loading from '../../../../components/loading';
 import Requests from '../../../../services/api';
+import { IFurniture } from '../../../../types/furnitures';
 import { IResponseGetRooms } from '../../../../types/rooms';
 import { Container } from './styles';
 
@@ -29,6 +28,8 @@ const CreateRoom: React.FC = () => {
   const [roomExists, setRoomExists] = React.useState<boolean>(false);
   const [onEditRoom, setOnEditRoom] = React.useState<boolean>(false);
   const [onCreateRoom, setOnCreateRoom] = React.useState<boolean>(false);
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  const [furnitures, setFurnitures] = React.useState<IFurniture[]>();
 
   const location = useLocation();
   const currentPathSplit = location.pathname.split('/');
@@ -138,8 +139,31 @@ const CreateRoom: React.FC = () => {
     }, 200);
   };
 
+  const getFurnitures = async (roomId: number) => {
+    const furnitures = await Requests.getFurnituresByRoomId(roomId);
+
+    if (furnitures.error) {
+      addToast(furnitures.messages || 'Ocorreu um erro!', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
+
+    setFurnitures(furnitures.data);
+  };
+
+  const redirectToFurniturePage = (roomId: string) => {
+    if (roomId) {
+      navigate(`${roomId}`);
+    } else {
+      addToast('Ambiente não encontrado. Entre em contato com o suporte!', {
+        appearance: 'error',
+        autoDismiss: false,
+      });
+    }
+  };
+
   React.useEffect(() => {
-    console.log(param);
     if (Number(param)) {
       getRoomById(param);
     } else if (param === 'criar') {
@@ -160,15 +184,21 @@ const CreateRoom: React.FC = () => {
     }
   }, [roomName, roomDescription]);
 
+  React.useEffect(() => {
+    if (roomExists && param) {
+      getFurnitures(Number(param));
+    }
+  }, [roomExists, refresh]);
+
   return (
     <Container>
       <Helmet>
         <title>Orçamento Express - Criar ambiente</title>
       </Helmet>
-      <header>
-        <Title title="Informações do ambiente" subtitle="" />
-      </header>
-      <main>
+
+      <Medium label="Informações do ambiente" />
+
+      <section id="room">
         <LowLabel label="Título" />
         <Grid
           gridTemplateColumn="1fr 262px"
@@ -222,35 +252,58 @@ const CreateRoom: React.FC = () => {
           />
         </Grid>
 
-        <Grid
-          gridTemplateColumn="1fr 1fr"
-          gridTemplateRows="50px"
-          gapColumn="50px"
-          gapRow="0"
-          margin="20px 0 0 0"
-        >
-          {(onEditRoom || onCreateRoom) && (
-            <>
-              <Button
-                label={onEditRoom ? 'Salvar edição' : 'Salvar'}
-                handleClick={
-                  onEditRoom
-                    ? () => {
-                        handleClickUpdateRoom(param);
-                      }
-                    : handleClickCreateRoom
+        {(onEditRoom || onCreateRoom) && (
+          <Grid
+            gridTemplateColumn="1fr 1fr"
+            gridTemplateRows="50px"
+            gapColumn="50px"
+            gapRow="0"
+            margin="20px 0 20px 0"
+          >
+            <Button
+              label={onEditRoom ? 'Salvar edição' : 'Salvar'}
+              handleClick={
+                onEditRoom
+                  ? () => {
+                      handleClickUpdateRoom(param);
+                    }
+                  : handleClickCreateRoom
+              }
+            />
+            <Button
+              background="#d5d5d5"
+              color="#000000"
+              handleClick={handleClickCancel}
+              label="Cancelar"
+            />
+          </Grid>
+        )}
+        <section id="furnitures" />
+        <Medium label="Móveis do ambiente" />
+        <header>
+          <LowLabel label="Nome do móvel" />
+          <GrayButton navigateTo="criar" label="Adicionar móvel" />
+        </header>
+        <div id="rooms-list">
+          {furnitures ? (
+            furnitures.map(furniture => (
+              <Item
+                name={furniture.furniture_name}
+                id={Number(furniture.id)}
+                status={Boolean(furniture.status)}
+                type="furniture"
+                refresh={refresh}
+                setRefresh={setRefresh}
+                handleClick={() =>
+                  redirectToFurniturePage(`movel/${furniture.id}`)
                 }
               />
-              <Button
-                background="#d5d5d5"
-                color="#000000"
-                handleClick={handleClickCancel}
-                label="Cancelar"
-              />
-            </>
+            ))
+          ) : (
+            <Loading />
           )}
-        </Grid>
-      </main>
+        </div>
+      </section>
     </Container>
   );
 };

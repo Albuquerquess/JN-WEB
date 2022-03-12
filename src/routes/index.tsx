@@ -14,6 +14,20 @@ import Video from '../pages/video';
 import ProtectedRoutes from './protectedRoutes';
 
 const MainRoutes: React.FC = () => {
+  const adminRoutes = [
+    {
+      path: '/admin/ambientes',
+      element: <AdminRooms />,
+    },
+    {
+      path: '/admin/ambientes/criar',
+      element: <CreateRoom />,
+    },
+    {
+      path: '/admin/ambientes/:roomId',
+      element: <CreateRoom />,
+    },
+  ];
   return (
     <R>
       <Route path="/" element={<Rooms />} />
@@ -26,32 +40,17 @@ const MainRoutes: React.FC = () => {
       <Route path="obrigado" element={<Thanks />} />
       <Route path="admin">
         <Route index element={<Login />} />
-        <Route path="ambientes">
+
+        {adminRoutes.map(adminRoute => (
           <Route
-            index
+            path={adminRoute.path}
             element={
               <ProtectedRoutes redirectTo="/admin">
-                <AdminRooms />
+                {adminRoute.element}
               </ProtectedRoutes>
             }
           />
-          <Route
-            path="criar"
-            element={
-              <ProtectedRoutes redirectTo="/admin">
-                <CreateRoom />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path=":roomId"
-            element={
-              <ProtectedRoutes redirectTo="/admin">
-                <CreateRoom />
-              </ProtectedRoutes>
-            }
-          />
-        </Route>
+        ))}
       </Route>
       <Route path="*" element={<h1>Página não encontrada</h1>} />
     </R>

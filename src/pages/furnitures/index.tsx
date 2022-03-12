@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import RingLoader from 'react-spinners/RingLoader';
 import { useToasts } from 'react-toast-notifications';
 
 import Button from '../../components/button';
 import FurnitureCard from '../../components/card/furnitureCard';
+import Loading from '../../components/loading';
 import PricePreview from '../../components/pricePreview';
 import Title from '../../components/title';
 import URLs from '../../helpers/URLs';
@@ -113,7 +113,7 @@ const Furnitures: React.FC = () => {
           <Button handleClick={() => handleClick()} />
         </>
       ) : (
-        <RingLoader />
+        <Loading />
       )}
       <PricePreview />
     </Container>

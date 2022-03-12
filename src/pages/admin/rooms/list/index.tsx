@@ -5,6 +5,7 @@ import { useToasts } from 'react-toast-notifications';
 
 import GrayButton from '../../../../components/button/grayButton';
 import Item from '../../../../components/item';
+import Loading from '../../../../components/loading';
 import Title from '../../../../components/title';
 import Requests from '../../../../services/api';
 import { IResponseGetRooms } from '../../../../types/rooms';
@@ -56,7 +57,7 @@ const AdminRooms: React.FC = () => {
       </header>
       <main>
         <div id="rooms-list">
-          {rooms &&
+          {rooms ? (
             rooms.map(room => (
               <Item
                 name={room.roomName}
@@ -67,7 +68,10 @@ const AdminRooms: React.FC = () => {
                 setRefresh={setRefresh}
                 handleClick={() => redirectToRoomPage(Number(room.id))}
               />
-            ))}
+            ))
+          ) : (
+            <Loading />
+          )}
         </div>
       </main>
     </Container>

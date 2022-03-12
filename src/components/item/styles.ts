@@ -9,7 +9,7 @@ export const Container = styled.div`
   grid-template-rows: 50px;
   column-gap: 26px;
 
-  p.title {
+  div.title {
     font-size: 20px;
     font-weight: bold;
 
@@ -19,5 +19,7 @@ export const Container = styled.div`
 
     display: flex;
     align-items: center;
+
+    cursor: pointer;
   }
 `;

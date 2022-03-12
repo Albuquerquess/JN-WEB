@@ -39,9 +39,9 @@ const Item: React.FC<IPropsItem> = ({
   };
 
   const furniture = {
-    del: Requests.deleteRoom,
-    enable: Requests.deleteRoom,
-    disable: Requests.deleteRoom,
+    del: Requests.deleteFurniture,
+    enable: Requests.updateFurnitureStatus,
+    disable: Requests.updateFurnitureStatus,
   };
 
   const variation = {
@@ -56,6 +56,10 @@ const Item: React.FC<IPropsItem> = ({
     switch (type) {
       case 'room':
         deleted = await room.del(id);
+        break;
+
+      case 'furniture':
+        deleted = await furniture.del(id);
         break;
 
       default:
@@ -84,6 +88,10 @@ const Item: React.FC<IPropsItem> = ({
         updated = await room.enable({ id, status: 'enable' });
         break;
 
+      case 'furniture':
+        updated = await furniture.enable({ id, status: 'enable' });
+        break;
+
       default:
         return;
     }
@@ -106,8 +114,11 @@ const Item: React.FC<IPropsItem> = ({
 
     switch (type) {
       case 'room':
-        updated = await room.enable({ id, status: 'disable' });
+        updated = await room.disable({ id, status: 'disable' });
+        break;
 
+      case 'furniture':
+        updated = await furniture.disable({ id, status: 'disable' });
         break;
 
       default:
@@ -134,8 +145,16 @@ const Item: React.FC<IPropsItem> = ({
   }
 
   return (
-    <Container onClick={() => handleItemClick()}>
-      <p className="title">{name}</p>
+    <Container>
+      <div
+        className="title"
+        onClick={handleItemClick}
+        onKeyPress={handleItemClick}
+        role="button"
+        tabIndex={0}
+      >
+        {name}
+      </div>
       <TrashButton
         handleClick={() => {
           del();

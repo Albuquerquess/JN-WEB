@@ -15,6 +15,6 @@ export const Container = styled.div`
     border: none;
 
     font-size: 2em;
-    padding: 20px 0 0 20px;
+    padding: 20px 0 20px 20px;
   }
 `;
