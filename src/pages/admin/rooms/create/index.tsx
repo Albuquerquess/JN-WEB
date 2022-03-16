@@ -152,9 +152,9 @@ const CreateRoom: React.FC = () => {
     setFurnitures(furnitures.data);
   };
 
-  const redirectToFurniturePage = (roomId: string) => {
-    if (roomId) {
-      navigate(`${roomId}`);
+  const redirectToFurniturePage = (path: string) => {
+    if (path) {
+      navigate(path);
     } else {
       addToast('Ambiente não encontrado. Entre em contato com o suporte!', {
         appearance: 'error',
@@ -278,32 +278,44 @@ const CreateRoom: React.FC = () => {
             />
           </Grid>
         )}
-        <section id="furnitures" />
-        <Medium label="Móveis do ambiente" />
-        <header>
-          <LowLabel label="Nome do móvel" />
-          <GrayButton navigateTo="criar" label="Adicionar móvel" />
-        </header>
-        <div id="rooms-list">
-          {furnitures ? (
-            furnitures.map(furniture => (
-              <Item
-                name={furniture.furniture_name}
-                id={Number(furniture.id)}
-                status={Boolean(furniture.status)}
-                type="furniture"
-                refresh={refresh}
-                setRefresh={setRefresh}
-                handleClick={() =>
-                  redirectToFurniturePage(`movel/${furniture.id}`)
-                }
-              />
-            ))
-          ) : (
-            <Loading />
-          )}
-        </div>
       </section>
+      {roomExists && !onCreateRoom && (
+        <section id="furnitures">
+          <Medium label="Móveis do ambiente" />
+          <header>
+            <LowLabel label="Nome do móvel" />
+            <GrayButton navigateTo="movel/criar" label="Adicionar móvel" />
+          </header>
+          <div id="furnitures-list">
+            {furnitures ? (
+              furnitures.map(furniture => (
+                <Item
+                  name={furniture.furniture_name}
+                  id={Number(furniture.id)}
+                  roomId={undefined}
+                  status={Boolean(furniture.status)}
+                  type="furniture"
+                  mode={onEditRoom ? 'edit' : 'create'}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  handleClick={() =>
+                    redirectToFurniturePage(`movel/${furniture.id}`)
+                  }
+                  onChangeName={() => {
+                    /*  */
+                  }}
+                  onChangeStatus={() => {
+                    /*  */
+                  }}
+                  disabled
+                />
+              ))
+            ) : (
+              <Loading />
+            )}
+          </div>
+        </section>
+      )}
     </Container>
   );
 };

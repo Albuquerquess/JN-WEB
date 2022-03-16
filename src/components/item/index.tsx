@@ -7,31 +7,45 @@ import TrashButton from '../trashButton';
 import { Container } from './styles';
 
 interface IPropsItem {
-  name: string;
   id: number;
+  roomId: number | undefined;
+  name: string;
   status: boolean;
-  type: 'room' | 'furniture' | 'variation';
   refresh: boolean;
-  setRefresh(value: boolean): void;
+  disabled: boolean;
   handleClick(): void;
+  onChangeName: (
+    value: string,
+  ) => void | React.Dispatch<React.SetStateAction<string>> | undefined;
+  setRefresh(value: boolean): void;
+  type: 'room' | 'furniture' | 'variation';
+  mode: 'create' | 'edit';
+  onChangeStatus: (
+    value: boolean,
+  ) => void | React.Dispatch<React.SetStateAction<boolean>> | undefined;
 }
 
 const Item: React.FC<IPropsItem> = ({
   id,
-  name,
+  mode,
   type,
-  setRefresh,
-  refresh,
+  name,
   status,
+  roomId,
+  refresh,
+  disabled,
+  setRefresh,
   handleClick,
+  onChangeName,
+  onChangeStatus,
 }) => {
   const { addToast } = useToasts();
+
   const typeFormated = {
     room: 'Ambiente',
     furniture: 'Móvel',
     variation: 'Variação',
   };
-
   const room = {
     del: Requests.deleteRoom,
     enable: Requests.updateRoomStatus,
@@ -59,7 +73,9 @@ const Item: React.FC<IPropsItem> = ({
         break;
 
       case 'furniture':
-        deleted = await furniture.del(id);
+        if (roomId) {
+          deleted = await furniture.del({ id, roomId });
+        }
         break;
 
       default:
@@ -82,79 +98,100 @@ const Item: React.FC<IPropsItem> = ({
 
   async function enable() {
     let updated;
+    if (mode === 'edit') {
+      switch (type) {
+        case 'room':
+          updated = await room.enable({ id, status: 'enable' });
+          break;
 
-    switch (type) {
-      case 'room':
-        updated = await room.enable({ id, status: 'enable' });
-        break;
+        case 'furniture':
+          updated = await furniture.enable({ id, status: 'enable' });
+          break;
 
-      case 'furniture':
-        updated = await furniture.enable({ id, status: 'enable' });
-        break;
+        default:
+          return;
+      }
 
-      default:
-        return;
-    }
-
-    if (updated && updated.error) {
-      addToast(updated.messages || 'Ocorreu um erro!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    } else {
-      addToast(`${typeFormated[type]} Ativado(a) com sucesso!`, {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+      if (updated && updated.error) {
+        addToast(updated.messages || 'Ocorreu um erro!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      } else {
+        if (onChangeStatus) {
+          onChangeStatus(true);
+        }
+        addToast(`${typeFormated[type]} Ativado(a) com sucesso!`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      }
+    } else if (onChangeStatus) {
+      onChangeStatus(true);
     }
   }
 
   async function disable() {
-    let updated;
+    if (mode === 'edit') {
+      let updated;
 
-    switch (type) {
-      case 'room':
-        updated = await room.disable({ id, status: 'disable' });
-        break;
+      switch (type) {
+        case 'room':
+          updated = await room.disable({ id, status: 'disable' });
+          break;
 
-      case 'furniture':
-        updated = await furniture.disable({ id, status: 'disable' });
-        break;
+        case 'furniture':
+          updated = await furniture.disable({ id, status: 'disable' });
+          break;
 
-      default:
-        return;
-    }
+        default:
+          return;
+      }
 
-    if (updated && updated.error) {
-      addToast(updated.messages || 'Ocorreu um erro!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    } else {
-      addToast(`${typeFormated[type]} desativado(a) com sucesso!`, {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+      if (updated && updated.error) {
+        addToast(updated.messages || 'Ocorreu um erro!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      } else {
+        if (onChangeStatus) {
+          onChangeStatus(false);
+        }
+        addToast(`${typeFormated[type]} desativado(a) com sucesso!`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      }
+    } else if (onChangeStatus) {
+      onChangeStatus(false);
     }
   }
 
-  function handleItemClick() {
+  const handleItemClick = () => {
     if (handleClick) {
       handleClick();
     }
-  }
+  };
+
+  const handleChangeName = (e: React.FormEvent<HTMLInputElement>) => {
+    if (!disabled && onChangeName) {
+      onChangeName(e.currentTarget.value);
+    }
+  };
 
   return (
-    <Container>
-      <div
+    <Container disabled={disabled}>
+      <input
         className="title"
         onClick={handleItemClick}
+        onChange={handleChangeName}
         onKeyPress={handleItemClick}
         role="button"
         tabIndex={0}
-      >
-        {name}
-      </div>
+        value={name}
+        readOnly={disabled}
+      />
+
       <TrashButton
         handleClick={() => {
           del();

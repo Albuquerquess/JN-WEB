@@ -16,6 +16,7 @@ const AdminRooms: React.FC = () => {
   const [rooms, setRooms] = React.useState<IResponseGetRooms[]>();
   const [refresh, setRefresh] = React.useState<boolean>(false);
   const navigate = useNavigate();
+
   async function getRooms() {
     const rooms = await Requests.getRooms();
 
@@ -30,7 +31,6 @@ const AdminRooms: React.FC = () => {
   }
 
   function redirectToRoomPage(roomId: number) {
-    console.log(roomId);
     if (roomId) {
       navigate(`${roomId}`);
     } else {
@@ -62,11 +62,20 @@ const AdminRooms: React.FC = () => {
               <Item
                 name={room.roomName}
                 id={Number(room.id)}
+                roomId={undefined}
                 status={Boolean(room.status)}
                 type="room"
+                mode="create"
                 refresh={refresh}
                 setRefresh={setRefresh}
                 handleClick={() => redirectToRoomPage(Number(room.id))}
+                onChangeName={() => {
+                  /*  */
+                }}
+                onChangeStatus={() => {
+                  /*  */
+                }}
+                disabled
               />
             ))
           ) : (

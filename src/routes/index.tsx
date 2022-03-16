@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes as R } from 'react-router-dom';
 
+import CreateFurniture from '../pages/admin/furnitures/create';
 import Login from '../pages/admin/login';
 import CreateRoom from '../pages/admin/rooms/create';
 import AdminRooms from '../pages/admin/rooms/list';
@@ -26,6 +27,14 @@ const MainRoutes: React.FC = () => {
     {
       path: '/admin/ambientes/:roomId',
       element: <CreateRoom />,
+    },
+    {
+      path: '/admin/ambientes/:roomId/movel/criar',
+      element: <CreateFurniture />,
+    },
+    {
+      path: '/admin/ambientes/:roomId/movel/:furnitureId',
+      element: <CreateFurniture />,
     },
   ];
   return (

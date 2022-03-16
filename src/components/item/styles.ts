@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+interface IStyleItemProps {
+  disabled: boolean;
+}
+
+export const Container = styled.div<IStyleItemProps>`
   width: 100%;
   height: 50px;
 
@@ -9,7 +13,8 @@ export const Container = styled.div`
   grid-template-rows: 50px;
   column-gap: 26px;
 
-  div.title {
+  input.title,
+  input.title:disabled {
     font-size: 20px;
     font-weight: bold;
 
@@ -17,9 +22,13 @@ export const Container = styled.div`
     border-radius: 5px;
     padding-left: 1em;
 
+    border: none;
+
     display: flex;
     align-items: center;
 
-    cursor: pointer;
+    color: #000000;
+
+    cursor: ${props => (props.disabled ? 'pointer' : 'text')};
   }
 `;

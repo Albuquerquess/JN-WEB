@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-import { IRequestUpdateFurnitureStatus } from '../types/furnitures';
+import {
+  IRequestUpdateFurnitureStatus,
+  IParamsFurniturePage,
+  IRequestUpdateFurniture,
+  IRequestCreateFurniture,
+  IRequestDeleteFurniture,
+} from '../types/furnitures';
 import {
   IRequestUpdateRoom,
   IRequestCreateRoom,
@@ -108,9 +114,47 @@ class Requests {
     }
   }
   /* Furnitures */
+
+  async createFurniture({ roomId, name }: IRequestCreateFurniture) {
+    try {
+      const response = await Api.post('furniture', {
+        roomId,
+        name,
+      });
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
   async getFurnituresByRoomId(roomId: number) {
     try {
-      const response = await Api.get(`furniture/${roomId}`);
+      const response = await Api.get(`furniture/findByRoom/${roomId}`);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async getFurnituresById({ furnitureId, roomId }: IParamsFurniturePage) {
+    try {
+      const response = await Api.get(`furniture/${furnitureId}/${roomId}`);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async updateFurniture({ id, roomId, name }: IRequestUpdateFurniture) {
+    try {
+      const response = await Api.put('furniture', {
+        id,
+        roomId,
+        name,
+      });
 
       return Response.good(response);
     } catch (error) {
@@ -128,9 +172,9 @@ class Requests {
     }
   }
 
-  async deleteFurniture(id: number) {
+  async deleteFurniture({ id, roomId }: IRequestDeleteFurniture) {
     try {
-      const response = await Api.delete(`furniture/${id}`);
+      const response = await Api.delete(`furniture/${id}/${roomId}`);
 
       return Response.good(response);
     } catch (error) {

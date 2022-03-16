@@ -12,10 +12,13 @@ export const Container = styled.div`
 
   width: 100%;
 
-  & > section#room,
+  section#room {
+    width: 100%;
+  }
+
   section#furnitures {
     width: 100%;
-    margin-bottom: 20px;
+    margin: 40px 0 20px 0;
 
     header {
       display: flex;
@@ -28,10 +31,8 @@ export const Container = styled.div`
         font-weight: bold;
       }
     }
-  }
 
-  section#room {
-    div#rooms-list {
+    div#furnitures-list {
       margin-top: 20px;
       & > div {
         margin-bottom: 20px;

@@ -8,8 +8,7 @@ const SwitchButtom: React.FC<ISwitchProps> = ({
   handleOnDisable,
   status,
 }) => {
-  const [checked, setChecked] = React.useState(status);
-
+  const [checked, setChecked] = React.useState(status || false);
   function handle() {
     if (!checked) {
       if (handleOnActivate) handleOnActivate();
