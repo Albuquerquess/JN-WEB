@@ -142,6 +142,10 @@ const Details: React.FC = () => {
   React.useEffect(() => {
     getColorAndTamponades();
   }, []);
+
+  React.useEffect(() => {
+    console.log(colorsAndTamponades);
+  }, [colorsAndTamponades]);
   return (
     <Container>
       <Label

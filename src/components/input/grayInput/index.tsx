@@ -34,7 +34,7 @@ const GrayInput: React.FC<IGrayInputProps> = ({
     }
   }
   return (
-    <Container>
+    <Container className="gray-input">
       <InputMask
         value={value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

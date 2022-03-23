@@ -6,7 +6,7 @@ export interface IFurniture {
 }
 
 export interface IRequestUpdateFurnitureStatus {
-  id: number;
+  furnitureId: number;
   status: 'enable' | 'disable';
 }
 

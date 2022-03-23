@@ -105,7 +105,10 @@ const Item: React.FC<IPropsItem> = ({
           break;
 
         case 'furniture':
-          updated = await furniture.enable({ id, status: 'enable' });
+          updated = await furniture.enable({
+            furnitureId: id,
+            status: 'enable',
+          });
           break;
 
         default:
@@ -141,7 +144,10 @@ const Item: React.FC<IPropsItem> = ({
           break;
 
         case 'furniture':
-          updated = await furniture.disable({ id, status: 'disable' });
+          updated = await furniture.disable({
+            furnitureId: id,
+            status: 'disable',
+          });
           break;
 
         default:

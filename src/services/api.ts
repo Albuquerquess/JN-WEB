@@ -162,9 +162,12 @@ class Requests {
     }
   }
 
-  async updateFurnitureStatus({ id, status }: IRequestUpdateFurnitureStatus) {
+  async updateFurnitureStatus({
+    furnitureId,
+    status,
+  }: IRequestUpdateFurnitureStatus) {
     try {
-      const response = await Api.patch(`furniture/${id}/${status}`);
+      const response = await Api.patch(`furniture/${furnitureId}/${status}`);
 
       return Response.good(response);
     } catch (error) {

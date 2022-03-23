@@ -2,20 +2,28 @@ import React from 'react';
 import ReactSwitch from 'react-switch';
 
 import { ISwitchProps } from '../../types/button';
+import logger from '../../utils/logger';
 
 const SwitchButtom: React.FC<ISwitchProps> = ({
   handleOnActivate,
   handleOnDisable,
   status,
 }) => {
-  const [checked, setChecked] = React.useState(status || false);
+  const [checked, setChecked] = React.useState(status);
+  logger.log(`SwitchButtom - [status: ${status}]`);
   function handle() {
+    logger.log(`SwitchButtom - handle() - [checked: ${checked}]`);
     if (!checked) {
       if (handleOnActivate) handleOnActivate();
     } else if (handleOnDisable) handleOnDisable();
 
     setChecked(!checked);
   }
+
+  React.useEffect(() => {
+    setChecked(status);
+  }, [status]);
+
   return (
     <ReactSwitch
       checked={checked}
