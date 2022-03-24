@@ -10,7 +10,7 @@ import Label from '../../components/label';
 import Select from '../../components/select';
 import PriceIndex from '../../helpers/priceIndex';
 import URLs from '../../helpers/URLs';
-import { Api } from '../../services/api';
+import Requests, { Api } from '../../services/api';
 import { addColorAndTamponade } from '../../store/actions/details';
 import { IAppState } from '../../store/types';
 import {
@@ -44,20 +44,28 @@ const Details: React.FC = () => {
 
   async function getColorAndTamponades(): Promise<void> {
     try {
-      const response = await Api.get(URLs.colorsAndTamponadesIndex);
+      const colorsAndTamponades = await Requests.getColorAndTamponade();
 
-      if (response.status !== 200) throw Error;
+      if (colorsAndTamponades.error) {
+        addToast(colorsAndTamponades.messages || 'Ocorreu um erro!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+
       const colorsAndTamponadesFormated = {
-        colors: response.data.colors.map((color: IColorResponse) => ({
-          value: color.id,
-          label: (
-            <div className="select-label">
-              {PriceIndex({ index: color.price_index })}
-              {color.color_name}
-            </div>
-          ),
-        })),
-        tamponades: response.data.tamponades.map(
+        colors: colorsAndTamponades.data.colors.map(
+          (color: IColorResponse) => ({
+            value: color.id,
+            label: (
+              <div className="select-label">
+                {PriceIndex({ index: color.price_index })}
+                {color.color_name}
+              </div>
+            ),
+          }),
+        ),
+        tamponades: colorsAndTamponades.data.tamponades.map(
           (tamponade: ITamponadeResponse) => ({
             value: tamponade.id,
             label: (
@@ -102,6 +110,8 @@ const Details: React.FC = () => {
       appearance: 'info',
       autoDismiss: true,
     });
+
+    console.log(colorsAndTamponades);
 
     const colorName = colorsAndTamponades.colors.filter(
       color => color.value === selectedColor,

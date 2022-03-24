@@ -194,6 +194,17 @@ class Requests {
       return Response.bad(error);
     }
   }
+
+  /* Color and tamponade */
+  async getColorAndTamponade() {
+    try {
+      const response = await Api.get('/colors-and-tamponade/index');
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
 }
 
 export default new Requests();
