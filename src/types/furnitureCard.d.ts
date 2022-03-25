@@ -1,10 +1,10 @@
 export interface IVariation {
   id: string;
-  variation_name: string;
-  variation_description: string;
-  variation_price_index: number;
-  variation_image: string;
-  furniture_id: string;
+  name: string;
+  description: string;
+  priceIndex: number;
+  imageSrc: string;
+  furnitureId: string;
   created_at: string;
 }
 
@@ -18,7 +18,7 @@ export interface IRoom {
   name: string;
 }
 
-export interface IFurnitureCartProps {
+export interface IFurnitureCardProps {
   furniture: IFurniture;
   variations: IVariation[];
   room: IRoom;

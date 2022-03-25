@@ -12,13 +12,13 @@ import {
   removeFurniture,
 } from '../../../store/actions/furnitures';
 import { IAppState, IAppStateFurniture } from '../../../store/types';
-import { IFurnitureCartProps } from '../../../types/furnitureCard';
+import { IFurnitureCardProps } from '../../../types/furnitureCard';
 import { IOption } from '../../../types/select';
 import logger from '../../../utils/logger';
 import Select from '../../select';
 import { Container } from './styles';
 
-const FurnitureCard: React.FC<IFurnitureCartProps> = ({
+const FurnitureCard: React.FC<IFurnitureCardProps> = ({
   furniture,
   variations,
   room,
@@ -38,7 +38,7 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
     logger.log(`
     [FurnitureCard] addSelectedFurniture -
     length: ${length}
-    furnitureId: ${variations[currentVariation].furniture_id}
+    furnitureId: ${variations[currentVariation].furnitureId}
     variationId: ${variations[currentVariation].id}
     currentVariation: ${currentVariation}`);
 
@@ -58,14 +58,14 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
     const payload = {
       furniture_name: furniture.furnitureName,
       room_name: room.name,
-      variation_name: variations[currentVariation].variation_name,
+      variation_name: variations[currentVariation].name,
     };
 
     await Api.post(URLs.furnituresSave, payload);
 
     dispatch(
       addFurniture({
-        furnitureId: variations[currentVariation].furniture_id,
+        furnitureId: variations[currentVariation].id,
         variationId: variations[currentVariation].id,
         roomId: room.id,
         length,
@@ -78,18 +78,22 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
   function removeSelectedFurniture() {
     dispatch(
       removeFurniture({
-        furnitureId: variations[currentVariation].furniture_id,
+        furnitureId: variations[currentVariation].furnitureId,
       }),
     );
     setSelected(false);
   }
 
-  function checkIftheFurnitureIsStored() {
+  function checkIfTheFurnitureIsStored() {
     const furnitureId = furniture.id;
 
     if (furnitureStored.selected && furnitureId) {
       const [furnitureIsStored] = furnitureStored.selected.filter(
         furniture => furniture.furnitureId === furnitureId,
+      );
+
+      logger.log(
+        `checkIfTheFurnitureIsStored - [furnitureIsStored: ${furnitureIsStored}]`,
       );
 
       if (furnitureIsStored) {
@@ -111,11 +115,11 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
     value: String(index),
     label: (
       <div className="select-label">
-        {PriceIndex({ index: variation.variation_price_index })}
-        {variation.variation_name}
+        {PriceIndex({ index: variation.priceIndex })}
+        {variation.name}
       </div>
     ),
-    priceIndex: Number(variation.variation_price_index),
+    priceIndex: Number(variation.priceIndex),
   }));
 
   const handleClick = () => {
@@ -127,12 +131,12 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
   };
 
   React.useEffect(() => {
-    checkIftheFurnitureIsStored();
+    checkIfTheFurnitureIsStored();
   }, []);
 
   return (
     <Container
-      image={variations[currentVariation].variation_image}
+      image={variations[currentVariation].imageSrc}
       selected={selected}
     >
       <section className="furniture-card-header" />
@@ -140,7 +144,7 @@ const FurnitureCard: React.FC<IFurnitureCartProps> = ({
       <section className="furniture-card-body">
         <div className="furniture-card-info-wrapper">
           <h3>{furniture.furnitureName}</h3>
-          <p>{variations[currentVariation].variation_description}</p>
+          <p>{variations[currentVariation].description}</p>
         </div>
         <div className="furniture-card-tools-wrapper">
           {variations.length > 1 && (
