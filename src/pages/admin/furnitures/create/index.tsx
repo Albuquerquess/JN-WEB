@@ -3,18 +3,15 @@ import { Helmet } from 'react-helmet';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
-import priceIndex3 from '../../../../assets/svg/price-3.svg';
 import Button from '../../../../components/button';
-import ImageButton from '../../../../components/button/imageButton';
+import GrayButton from '../../../../components/button/grayButton';
 import Grid from '../../../../components/grid';
 import GrayInput from '../../../../components/input/grayInput';
 import Item from '../../../../components/item';
 import LowLabel from '../../../../components/label/low';
 import Medium from '../../../../components/label/medium';
-import Select from '../../../../components/select';
-import SwitchButtom from '../../../../components/switchButtom';
-import TrashButton from '../../../../components/trashButton';
-import PriceIndex from '../../../../helpers/priceIndex';
+import Loading from '../../../../components/loading';
+import Variation from '../../../../components/variation';
 import Requests from '../../../../services/api';
 import {
   IParamsFurniturePage,
@@ -22,6 +19,7 @@ import {
   IRequestUpdateFurniture,
   IRequestUpdateFurnitureStatus,
 } from '../../../../types/furnitures';
+import { IVariation } from '../../../../types/variations';
 import logger from '../../../../utils/logger';
 import { Container } from './styles';
 
@@ -35,11 +33,11 @@ const CreateFurniture: React.FC = () => {
   const [initialFurnitureStatus, setInitialFurnitureStatus] =
     React.useState<boolean>(false);
 
-  const [variationName, setVariationName] = React.useState('');
-  const [variationFile, setVariationFile] = React.useState<File | null>(null);
-
+  // Variations
+  const [variationTitle, setVariationTitle] = React.useState('Tipo de portas');
   const [onCreateFurniture, setOnCreateFurniture] = React.useState(false);
   const [onEditFurniture, setOnEditFurniture] = React.useState(false);
+  const [variations, setVariations] = React.useState<IVariation[]>([]);
 
   const [refresh, setRefresh] = React.useState<boolean>(false);
 
@@ -66,6 +64,20 @@ const CreateFurniture: React.FC = () => {
       });
     } else {
       logger.log('edit furniture mode ON!');
+
+      const variations = await Requests.getVariationsByFurnitureId({
+        furnitureId,
+        roomId,
+      });
+
+      if (variations.error) {
+        addToast(furniture.messages || 'Ocorreu um erro!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+
+      setVariations(variations.data);
 
       setInitialFurnitureStatus(Boolean(furniture.data.status));
       setInitialFurnitureName(furniture.data.furniture_name);
@@ -129,8 +141,6 @@ const CreateFurniture: React.FC = () => {
         furnitureId,
         status,
       });
-
-      console.log({ updateFurnitureName });
 
       if (updateFurnitureName.error) {
         addToast(updateFurnitureName.messages || 'Ocorreu um erro!', {
@@ -215,39 +225,6 @@ const CreateFurniture: React.FC = () => {
       `furnitureName: [furnitureName: ${furnitureName}][furnitureStatus: ${furnitureStatus}]`,
     );
   }, [furnitureName, furnitureStatus]);
-
-  const Variations = [
-    {
-      id: 1,
-      variation_name: 'Portas de MDF',
-      status: 1,
-      variation_value: '1234.56',
-      percentage_by_color: 0.2,
-      pergcentage_by_laca: 0.5,
-      percentage_by_tamponade: 0.4,
-      variation_description:
-        'Lorem anim laborum magna ad proident commodo fugiat minim. Qui ex anim veniam proident velit et cillum anim sunt anim aute. Incididunt ex elit dolor sit incididunt consectetur amet amet exercitation. Amet pariatur nostrud adipisicing ad aliqua ipsum excepteur aliqua ut nulla reprehenderit exercitation. Minim consequat duis est aute duis esse magna cupidatat eiusmod reprehenderit Lorem do. Cupidatat veniam id voluptate sunt.',
-      variation_price_index: 1,
-      furniture_id: furnitureId,
-      variation_image:
-        'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.leroymerlin.com.br%2Farmario-aereo-mdf-porta-basculante-branco-acetinado-lilies-moveis_1567068894&psig=AOvVaw0T9V3zY2V4TJChK3uEIXV-&ust=1647781722986000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPi1mrSf0vYCFQAAAAAdAAAAABAF',
-    },
-    {
-      id: 2,
-      variation_name: 'Vidro reflecta bronze',
-      status: 0,
-      variation_value: '4455.66',
-      percentage_by_color: 0.2,
-      pergcentage_by_laca: 0.5,
-      percentage_by_tamponade: 0.4,
-      variation_description:
-        'Excepteur minim esse sint veniam mollit in magna irure cupidatat Lorem consectetur. Ipsum dolore qui adipisicing consectetur aliquip aute. Aliquip consectetur est amet aliquip voluptate quis enim pariatur magna sit ad sint amet et.',
-      variation_price_index: 3,
-      furniture_id: furnitureId,
-      variation_image:
-        'https://www.google.com/url?sa=i&url=https%3A%2F%2Floja.madesa.com%2Farmario-aereo-madesa-reims-2-portas-de-correr-de-vidro-reflex-preto%2Fp&psig=AOvVaw1Eq6rsOMqXLwFEa_CAZSDz&ust=1647782150328000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPCDgYCh0vYCFQAAAAAdAAAAABAG',
-    },
-  ];
 
   return (
     <Container>
@@ -342,56 +319,47 @@ const CreateFurniture: React.FC = () => {
       {!onCreateFurniture && (
         <section id="variations-informations">
           <Medium label="Variações do móvel" />
+          <LowLabel label="Titulo das variações" />
+
           <Grid
-            gridTemplateColumn="repeat(2, 137px) repeat(4, 118px)"
+            gridTemplateColumn="1fr 262px"
             gridTemplateRows="50px"
             gapColumn="26px"
             gapRow="0"
-            margin="41px 0 41px 0"
+            margin="20px 0 41px 0"
           >
             <GrayInput
               mask=""
               type="text"
-              placeholder="Nome da variação"
-              value={variationName}
-              onChangeValue={setVariationName}
-              onInputBlur={() => {
-                /*  */
-              }}
-              id="room-name"
-            />
-            <GrayInput
-              mask=""
-              type="text"
               placeholder=""
-              value={variationName}
-              onChangeValue={setVariationName}
+              value={variationTitle}
+              onChangeValue={setVariationTitle}
               onInputBlur={() => {
                 /*  */
               }}
               id="room-name"
             />
-            <div className="variation-price-index">
-              <Select
-                menuDirection="auto"
-                options={[]}
-                defaultValue={[][0]}
-                placeholder=""
-                setValue={(value: string) => console.log(value)}
-              />
-            </div>
-            <ImageButton label="imagem" setFile={setVariationFile} />
-            <TrashButton />
-            <SwitchButtom
-              status
-              handleOnActivate={() => {
-                /*   */
-              }}
-              handleOnDisable={() => {
-                /*  */
-              }}
-            />
+            <GrayButton label="Adicionar variação" />
           </Grid>
+
+          {variations.length > 0 ? (
+            variations.map((variation, index: number) => (
+              <Variation
+                id={Number(variation.id)}
+                type="edit"
+                index={index + 1}
+                title={variation.title}
+                value={Number(variation.value)}
+                description={variation.description}
+                status={Boolean(variation.status)}
+                handleCreateClick={() => {
+                  /*  */
+                }}
+              />
+            ))
+          ) : (
+            <Loading />
+          )}
         </section>
       )}
     </Container>

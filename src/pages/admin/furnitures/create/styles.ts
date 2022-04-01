@@ -5,8 +5,11 @@ export const Container = styled.div`
   height: 100%;
 
   section#variations-informations {
+    hr {
+      margin-bottom: 41px;
+    }
+
     div#grid-container {
-      height: 50px;
       div.furniture-price-index,
       div.react-select__control {
         height: 50px;
@@ -15,6 +18,10 @@ export const Container = styled.div`
       div.gray-input {
         min-width: 100%;
       }
+    }
+
+    div.variation-wrapper _ div#grid-container > div.textarea-container {
+      margin-bottom: 40px;
     }
   }
 `;

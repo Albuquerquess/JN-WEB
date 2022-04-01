@@ -1,8 +1,8 @@
 export interface IFurniture {
   id: number;
-  furniture_name: string;
+  furnitureName: string;
   status: 1 | 0;
-  room_id: number;
+  roomId: number;
 }
 
 export interface IRequestUpdateFurnitureStatus {

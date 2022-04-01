@@ -21,6 +21,7 @@ const ImageButton: React.FC<IImageButtonProps> = ({ setFile, label }) => {
     if (!input.files?.length) {
       return;
     }
+
     const fileUploaded = input.files[0];
     setFile(fileUploaded);
     setFilename(fileUploaded.name);

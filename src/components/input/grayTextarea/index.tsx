@@ -29,7 +29,7 @@ const GrayTextarea: React.FC<IGrayTeaxtareaProps> = ({
     }
   }
   return (
-    <Container>
+    <Container className="textarea-container">
       <textarea
         value={value}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {

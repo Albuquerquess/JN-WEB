@@ -9,8 +9,8 @@ interface IGrayInputProps {
   value: string;
   type: string | undefined;
   placeholder: string;
-  onChangeValue: React.Dispatch<React.SetStateAction<string>> | undefined;
-  onInputBlur: React.Dispatch<React.SetStateAction<string>> | undefined;
+  onChangeValue: React.Dispatch<React.SetStateAction<any>> | undefined;
+  onInputBlur: React.Dispatch<React.SetStateAction<any>> | undefined;
 }
 
 const GrayInput: React.FC<IGrayInputProps> = ({
@@ -33,6 +33,10 @@ const GrayInput: React.FC<IGrayInputProps> = ({
       onInputBlur(e.target.value);
     }
   }
+
+  React.useEffect(() => {
+    console.log(value);
+  }, [value]);
   return (
     <Container className="gray-input">
       <InputMask
@@ -47,7 +51,9 @@ const GrayInput: React.FC<IGrayInputProps> = ({
         type={type}
         placeholder={placeholder}
         className="gray-input"
+        color="red"
         id={id}
+        maskChar={null}
       />
     </Container>
   );

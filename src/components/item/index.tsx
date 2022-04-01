@@ -129,6 +129,7 @@ const Item: React.FC<IPropsItem> = ({
           autoDismiss: true,
         });
       }
+      setRefresh(!refresh);
     } else if (onChangeStatus) {
       onChangeStatus(true);
     }
@@ -160,6 +161,8 @@ const Item: React.FC<IPropsItem> = ({
           autoDismiss: true,
         });
       } else {
+        setRefresh(!refresh);
+
         if (onChangeStatus) {
           onChangeStatus(false);
         }

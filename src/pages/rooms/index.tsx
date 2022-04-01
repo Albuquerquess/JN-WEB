@@ -60,6 +60,7 @@ const Rooms: React.FC = () => {
   React.useEffect(() => {
     getRooms();
   }, []);
+
   return (
     <Container>
       <Helmet>

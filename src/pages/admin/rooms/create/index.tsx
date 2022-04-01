@@ -16,6 +16,7 @@ import Loading from '../../../../components/loading';
 import Requests from '../../../../services/api';
 import { IFurniture } from '../../../../types/furnitures';
 import { IResponseGetRooms } from '../../../../types/rooms';
+import logger from '../../../../utils/logger';
 import { Container } from './styles';
 
 const CreateRoom: React.FC = () => {
@@ -186,6 +187,7 @@ const CreateRoom: React.FC = () => {
 
   React.useEffect(() => {
     if (roomExists && param) {
+      logger.log('refresh');
       getFurnitures(Number(param));
     }
   }, [roomExists, refresh]);
@@ -290,12 +292,12 @@ const CreateRoom: React.FC = () => {
             {furnitures ? (
               furnitures.map(furniture => (
                 <Item
-                  name={furniture.furniture_name}
+                  name={furniture.furnitureName}
                   id={Number(furniture.id)}
                   roomId={undefined}
                   status={Boolean(furniture.status)}
                   type="furniture"
-                  mode={onEditRoom ? 'edit' : 'create'}
+                  mode="edit"
                   refresh={refresh}
                   setRefresh={setRefresh}
                   handleClick={() =>

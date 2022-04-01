@@ -12,6 +12,11 @@ import {
   IRequestCreateRoom,
   IRequestUpdateRoomStatus,
 } from '../types/rooms';
+import {
+  IRequestFindVariationsByFurnitureId,
+  IRequestUpdateVariationStatus,
+  IUpdateVariation,
+} from '../types/variations';
 import Response from './response';
 
 export const Api = axios.create({
@@ -188,6 +193,52 @@ class Requests {
   async deleteVariation(id: number) {
     try {
       const response = await Api.delete(`variation/${id}`);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async getVariationsByFurnitureId({
+    furnitureId,
+    roomId,
+  }: IRequestFindVariationsByFurnitureId) {
+    try {
+      const response = await Api.get(`variation/${furnitureId}/${roomId}`);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async updateVariation({
+    id,
+    title,
+    description,
+    priceIndex,
+    value,
+  }: IUpdateVariation) {
+    try {
+      const response = await Api.put('variation/', {
+        id,
+        title,
+        description,
+        priceIndex,
+        value,
+      });
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async updateVariationStatus({ id, status }: IRequestUpdateVariationStatus) {
+    try {
+      const statusFormated = status ? 'enable' : 'disable';
+      const response = await Api.patch(`variation/${id}/${statusFormated}`);
 
       return Response.good(response);
     } catch (error) {
