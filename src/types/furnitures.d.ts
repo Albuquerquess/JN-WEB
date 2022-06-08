@@ -30,3 +30,14 @@ export interface IRequestDeleteFurniture {
   id: number;
   roomId: number;
 }
+
+export interface IRequestSaveSelectedFurniture {
+  furnitureName: string;
+  roomName: string;
+  variationName: string;
+}
+
+export interface IParamsGetFurnituresByRoomId {
+  roomId: number;
+  getActive: boolean;
+}

@@ -1,8 +1,10 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 
+import PriceIndex from '../../helpers/priceIndex';
 import Requests from '../../services/api';
 import { IRequestUpdateVariationStatus } from '../../types/variations';
+import { formatNumber } from '../../utils/removeSpecialChars';
 import Button from '../button';
 import ImageButton from '../button/imageButton';
 import Grid from '../grid';
@@ -22,7 +24,12 @@ interface IPropsVariations {
   value: number;
   index: number;
   description: string;
+  priceIndex: number;
+  furnitureId: number;
+  roomId: number;
   handleCreateClick(): void;
+  handleDeleteClick(): void;
+  handleClickCancel(): void;
 }
 
 const Variation: React.FC<IPropsVariations> = ({
@@ -33,47 +40,70 @@ const Variation: React.FC<IPropsVariations> = ({
   value,
   status = true,
   description,
+  furnitureId,
+  roomId,
+  priceIndex,
   handleCreateClick,
+  handleDeleteClick,
+  handleClickCancel,
 }) => {
   const [variationTitle, setVariationTitle] = React.useState(title);
   const [variationDescription, setVariationDescription] =
     React.useState(description);
-  const [variationValue, setVariationValue] = React.useState<number>(value);
+  const [variationValue, setVariationValue] = React.useState<string>(
+    String(value),
+  );
   const [variationFile, setVariationFile] = React.useState<File | null>(null);
   const [variationInitialName, setVariationInitialName] = React.useState(title);
+  const [variationPriceIndex, setVariationPriceIndex] = React.useState(
+    priceIndex || 1,
+  );
   const [variationInitialDescription, setVariationInitialDescription] =
     React.useState(description);
   const [variationInitialValue, setVariationInitialValue] =
     React.useState<number>(value);
   const [variationInitialFile, setVariationInitialFile] =
     React.useState<File | null>(null);
+  const [variationInitialPriceIndex, setVariationInitialPriceIndex] =
+    React.useState(priceIndex || 1);
+
   const [onCancelEdit, setOnCancelEdit] = React.useState<boolean>(false);
 
   const [onEditVariation, setOnEditVariation] = React.useState<boolean>(false);
 
   const { addToast } = useToasts();
 
-  const handleClickCancel = () => {
+  const priceIndexes = [1, 2, 3].map((priceIndex: number) => ({
+    label: PriceIndex({ index: priceIndex }),
+    priceIndex,
+    value: String(priceIndex),
+  }));
+
+  const handleClickClear = () => {
     setOnCancelEdit(true);
 
     setOnEditVariation(false);
     setVariationTitle(title);
     setVariationDescription(description);
-    setVariationValue(value);
+    setVariationValue(String(value));
+    setVariationPriceIndex(Number(priceIndex));
 
     setVariationFile(null);
 
     setOnCancelEdit(false);
+
+    handleClickCancel();
   };
 
-  const handleEditFurnitureMode = () => {
+  const handleEditVariationMode = () => {
     if (
-      type === 'edit' &&
-      !onCancelEdit &&
-      (variationInitialName !== variationTitle ||
-        variationInitialDescription !== variationDescription ||
-        variationInitialValue !== variationValue ||
-        variationInitialFile !== variationFile)
+      (type === 'edit' &&
+        !onCancelEdit &&
+        (variationInitialName !== variationTitle ||
+          variationInitialDescription !== variationDescription ||
+          String(variationInitialValue) !== String(variationValue) ||
+          variationInitialFile !== variationFile)) ||
+      variationInitialPriceIndex !== variationPriceIndex
     ) {
       setOnEditVariation(true);
     } else {
@@ -85,19 +115,57 @@ const Variation: React.FC<IPropsVariations> = ({
     setTimeout(() => {
       setVariationInitialName(variationTitle);
       setVariationInitialDescription(variationDescription);
-      setVariationInitialValue(variationValue);
+      setVariationInitialValue(Number(variationValue));
       setVariationInitialFile(variationFile);
+      setVariationInitialPriceIndex(priceIndex);
 
       setOnEditVariation(false);
     }, 200);
+  };
+
+  const createVariation = async () => {
+    if (variationFile) {
+      const createVariationResponse = await Requests.createVariation({
+        title: variationTitle,
+        description: variationDescription,
+        value: formatNumber(variationValue),
+        file: variationFile,
+        furnitureId,
+        roomId,
+        priceIndex: Number(variationPriceIndex),
+      });
+      if (createVariationResponse.error) {
+        addToast(
+          createVariationResponse.messages ||
+            'Ocorreu um erro ao criar à variação!',
+          {
+            appearance: 'error',
+            autoDismiss: true,
+          },
+        );
+      } else {
+        addToast('Variação criada com sucesso', {
+          appearance: 'success',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+
+        handleCreateClick();
+      }
+    } else {
+      addToast('Selecione uma imagem para a variação', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
   };
 
   const updateVariation = async () => {
     const update = await Requests.updateVariation({
       id,
       title: variationTitle,
-      value: variationValue,
-      priceIndex: 1,
+      value: formatNumber(variationValue),
+      priceIndex: variationPriceIndex,
       description: variationDescription,
     });
 
@@ -119,29 +187,51 @@ const Variation: React.FC<IPropsVariations> = ({
     id,
     status,
   }: IRequestUpdateVariationStatus) => {
-    const updateStatus = await Requests.updateVariationStatus({
-      id,
-      status,
-    });
+    if (type === 'edit') {
+      const updateStatus = await Requests.updateVariationStatus({
+        id,
+        status,
+      });
 
-    if (updateStatus.error) {
-      addToast(
-        updateStatus.messages || 'Erro ao atualizar status da variação!',
-        {
+      if (updateStatus.error) {
+        addToast(
+          updateStatus.messages || 'Erro ao atualizar status da variação!',
+          {
+            appearance: 'error',
+            autoDismiss: true,
+          },
+        );
+      } else {
+        addToast(
+          `Status ${
+            `de ${title}` || 'da Variação'
+          } atualizado com sucesso para ${status ? 'Ativo' : 'Inativo'}`,
+          {
+            appearance: 'success',
+            autoDismiss: true,
+          },
+        );
+      }
+    }
+  };
+
+  const handleClickDeleteVariation = async () => {
+    if (type === 'edit') {
+      const deleteVariation = await Requests.deleteVariation(id);
+
+      if (deleteVariation.error) {
+        addToast(deleteVariation.messages || 'Erro ao deletar variação!', {
           appearance: 'error',
           autoDismiss: true,
-        },
-      );
-    } else {
-      addToast(
-        `Status ${`de ${title}` || 'da Variação'} atualizado com sucesso para ${
-          status ? 'Ativo' : 'Inativo'
-        }`,
-        {
+        });
+      } else {
+        addToast(`${title || `Variação`} deletado(a) com sucesso!`, {
           appearance: 'success',
           autoDismiss: true,
-        },
-      );
+        });
+
+        handleDeleteClick();
+      }
     }
   };
 
@@ -150,8 +240,18 @@ const Variation: React.FC<IPropsVariations> = ({
   }, []);
 
   React.useEffect(() => {
-    handleEditFurnitureMode();
-  }, [variationTitle, variationDescription, variationValue, variationFile]);
+    handleEditVariationMode();
+  }, [
+    variationTitle,
+    variationDescription,
+    variationValue,
+    variationFile,
+    variationPriceIndex,
+  ]);
+
+  React.useEffect(() => {
+    console.log(variationPriceIndex);
+  }, [variationPriceIndex]);
 
   return (
     <Container>
@@ -180,7 +280,9 @@ const Variation: React.FC<IPropsVariations> = ({
 
       <LowLabel label={`Valor da variação ${index}`} />
       <Grid
-        gridTemplateColumn="1fr repeat(4, 118px)"
+        gridTemplateColumn={
+          type === 'create' ? '1fr repeat(2, 118px)' : '1fr repeat(4, 118px)'
+        }
         gridTemplateRows="50px"
         gapColumn="26px"
         gapRow="0"
@@ -191,7 +293,14 @@ const Variation: React.FC<IPropsVariations> = ({
           type="text"
           placeholder=""
           value={String(variationValue)}
-          onChangeValue={setVariationValue}
+          onChangeValue={(e: string) => {
+            if (variationValue === '0') {
+              const valueFormated = e.replace('0', '');
+              setVariationValue(valueFormated);
+            } else {
+              setVariationValue(e);
+            }
+          }}
           onInputBlur={() => {
             /*  */
           }}
@@ -200,23 +309,31 @@ const Variation: React.FC<IPropsVariations> = ({
         <div className="variation-price-index">
           <Select
             menuDirection="auto"
-            options={[]}
-            defaultValue={[][0]}
+            options={priceIndexes}
+            defaultValue={
+              priceIndexes.find(
+                priceIndex => Number(priceIndex.value) === variationPriceIndex,
+              ) || priceIndexes[0]
+            }
             placeholder=""
-            setValue={(value: string) => console.log(value)}
+            setValue={(value: string) => setVariationPriceIndex(Number(value))}
           />
         </div>
         <ImageButton label="imagem" setFile={setVariationFile} />
-        <TrashButton />
-        <SwitchButtom
-          status={status}
-          handleOnActivate={() => {
-            updateVariationStatus({ id, status: true });
-          }}
-          handleOnDisable={() => {
-            updateVariationStatus({ id, status: false });
-          }}
-        />
+        {type === 'edit' && (
+          <>
+            <TrashButton handleClick={handleClickDeleteVariation} />
+            <SwitchButtom
+              status={type === 'edit' ? status : true}
+              handleOnActivate={() => {
+                updateVariationStatus({ id, status: true });
+              }}
+              handleOnDisable={() => {
+                updateVariationStatus({ id, status: false });
+              }}
+            />
+          </>
+        )}
       </Grid>
       <LowLabel label={`Descrição da variação ${index}`} />
       <Grid
@@ -236,7 +353,7 @@ const Variation: React.FC<IPropsVariations> = ({
           }}
         />
       </Grid>
-      {onEditVariation && (
+      {(type === 'create' || onEditVariation) && (
         <Grid
           gridTemplateColumn="1fr 1fr"
           gridTemplateRows="50px"
@@ -245,21 +362,21 @@ const Variation: React.FC<IPropsVariations> = ({
           margin="20px 0 20px 0"
         >
           <Button
-            label={type === 'edit' ? 'Salvar' : 'Cancelar'}
+            label="Salvar"
             handleClick={
               type === 'edit'
                 ? () => {
                     updateVariation();
                   }
                 : () => {
-                    handleCreateClick();
+                    createVariation();
                   }
             }
           />
           <Button
             background="#d5d5d5"
             color="#000000"
-            handleClick={handleClickCancel}
+            handleClick={handleClickClear}
             label="Cancelar"
           />
         </Grid>

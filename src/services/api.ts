@@ -6,6 +6,8 @@ import {
   IRequestUpdateFurniture,
   IRequestCreateFurniture,
   IRequestDeleteFurniture,
+  IRequestSaveSelectedFurniture,
+  IParamsGetFurnituresByRoomId,
 } from '../types/furnitures';
 import {
   IRequestUpdateRoom,
@@ -13,6 +15,7 @@ import {
   IRequestUpdateRoomStatus,
 } from '../types/rooms';
 import {
+  IRequestCreateVariation,
   IRequestFindVariationsByFurnitureId,
   IRequestUpdateVariationStatus,
   IUpdateVariation,
@@ -53,9 +56,18 @@ class Requests {
     }
   }
 
-  async getRooms() {
+  async getActiveRooms() {
     try {
-      const response = await Api.get('room');
+      const response = await Api.get('room/active');
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+  async getAllRooms() {
+    try {
+      const response = await Api.get('room/all');
 
       return Response.good(response);
     } catch (error) {
@@ -133,9 +145,16 @@ class Requests {
     }
   }
 
-  async getFurnituresByRoomId(roomId: number) {
+  async getFurnituresByRoomId({
+    roomId,
+    getActive,
+  }: IParamsGetFurnituresByRoomId) {
     try {
-      const response = await Api.get(`furniture/findByRoom/${roomId}`);
+      const response = await Api.get(`furniture/findByRoom/${roomId}`, {
+        params: {
+          getActive,
+        },
+      });
 
       return Response.good(response);
     } catch (error) {
@@ -190,6 +209,34 @@ class Requests {
     }
   }
   /* Variation */
+
+  async createVariation({
+    title,
+    value,
+    description,
+    priceIndex,
+    furnitureId,
+    roomId,
+    file,
+  }: IRequestCreateVariation) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('title', title);
+      formData.append('value', value.toString());
+      formData.append('description', description);
+      formData.append('roomId', roomId.toString());
+      formData.append('priceIndex', priceIndex.toString());
+      formData.append('furnitureId', furnitureId.toString());
+
+      const response = await Api.post('variation', formData);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
   async deleteVariation(id: number) {
     try {
       const response = await Api.delete(`variation/${id}`);
@@ -239,6 +286,24 @@ class Requests {
     try {
       const statusFormated = status ? 'enable' : 'disable';
       const response = await Api.patch(`variation/${id}/${statusFormated}`);
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  async saveSelectFurniture({
+    furnitureName,
+    roomName,
+    variationName,
+  }: IRequestSaveSelectedFurniture) {
+    try {
+      const response = await Api.post('selectedFurniture', {
+        furnitureName,
+        roomName,
+        variationName,
+      });
 
       return Response.good(response);
     } catch (error) {

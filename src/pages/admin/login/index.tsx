@@ -116,7 +116,7 @@ const Login: React.FC = () => {
             onChangeValue={formik.handleChange}
             onInputBlur={formik.handleBlur}
             name="password"
-            type="text"
+            type="password"
             placeholder="**********"
             error={formik.errors.password}
           />

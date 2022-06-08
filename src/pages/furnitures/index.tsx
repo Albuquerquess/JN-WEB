@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
@@ -11,13 +11,13 @@ import Title from '../../components/title';
 import Requests from '../../services/api';
 import { IAppState } from '../../store/types';
 import { IVariation } from '../../types/furnitureCard';
-import logger from '../../utils/logger';
 import { Container } from './styles';
 
 type IFurnitures = {
-  id: string;
+  id: number;
   furnitureName: string;
-  status: 0 | 1;
+  status: 1 | 0;
+  roomId: number;
   variations: IVariation[];
 };
 
@@ -34,14 +34,18 @@ const Furnitures: React.FC = () => {
 
   async function getFurnituresByRoom() {
     setLoading(true);
-    const furnitures = await Requests.getFurnituresByRoomId(
-      Number(currentRoom.id),
-    );
+    const furnitures = await Requests.getFurnituresByRoomId({
+      roomId: Number(currentRoom.id),
+      getActive: true,
+    });
 
     if (furnitures.error) {
       addToast(furnitures.messages || 'Ocorreu um erro!', {
         appearance: 'error',
         autoDismiss: true,
+        onDismiss: () => {
+          navigate('/admin/ambientes');
+        },
       });
     }
 
@@ -75,10 +79,6 @@ const Furnitures: React.FC = () => {
     getFurnituresByRoom();
   }, []);
 
-  React.useEffect(() => {
-    logger.log('furnitures', furnitures);
-  }, [furnitures]);
-
   return (
     <Container>
       {furnitures.length > 0 && !loading && (
@@ -94,7 +94,7 @@ const Furnitures: React.FC = () => {
                   variations={furniture.variations}
                   furniture={{
                     furnitureName: furniture.furnitureName,
-                    id: furniture.id,
+                    id: String(furniture.id),
                   }}
                   room={currentRoom}
                 />

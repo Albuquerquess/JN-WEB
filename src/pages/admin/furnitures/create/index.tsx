@@ -38,8 +38,13 @@ const CreateFurniture: React.FC = () => {
   const [onCreateFurniture, setOnCreateFurniture] = React.useState(false);
   const [onEditFurniture, setOnEditFurniture] = React.useState(false);
   const [variations, setVariations] = React.useState<IVariation[]>([]);
+  const [createVariations, setCreateVariations] = React.useState<
+    IVariation[] | null
+  >(null);
 
   const [refresh, setRefresh] = React.useState<boolean>(false);
+
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -49,6 +54,8 @@ const CreateFurniture: React.FC = () => {
     furnitureId,
     roomId,
   }: IParamsFurniturePage) => {
+    setLoading(true);
+
     const furniture = await Requests.getFurnituresById({ furnitureId, roomId });
 
     if (furniture.error) {
@@ -57,7 +64,7 @@ const CreateFurniture: React.FC = () => {
         autoDismiss: true,
       });
     } else if (!furniture.data) {
-      addToast('Móvel nao existe ou nao pertence ao ambiente selecionado!', {
+      addToast('Móvel não existe ou não pertence ao ambiente selecionado!', {
         appearance: 'error',
         autoDismiss: true,
         onDismiss: () => navigate(`/admin/ambientes/${roomId}`),
@@ -77,12 +84,19 @@ const CreateFurniture: React.FC = () => {
         });
       }
 
-      setVariations(variations.data);
+      setVariations(
+        variations.data.map((variation: IVariation) => ({
+          ...variation,
+          type: 'create',
+        })),
+      );
 
       setInitialFurnitureStatus(Boolean(furniture.data.status));
       setInitialFurnitureName(furniture.data.furniture_name);
       setFurnitureStatus(Boolean(furniture.data.status));
       setFurnitureName(furniture.data.furniture_name);
+
+      setLoading(false);
     }
   };
 
@@ -90,12 +104,19 @@ const CreateFurniture: React.FC = () => {
     return navigate('/admin/ambientes');
   };
 
+  const popCreatedVariation = () => {
+    setCreateVariations(null);
+  };
+
+  const redirectToRooms = () => {
+    navigate('/admin/ambientes');
+  };
+
   const handleClickUpdateFurniture = async ({
     id,
     roomId,
     name,
   }: IRequestUpdateFurniture) => {
-    console.log(furnitureId);
     if (furnitureId) {
       const updateFurniture = await Requests.updateFurniture({
         id,
@@ -103,7 +124,7 @@ const CreateFurniture: React.FC = () => {
         name,
       });
 
-      console.log({ updateFurniture });
+      logger.log(`[updateFurniture - ${updateFurniture}]`);
 
       if (updateFurniture.error) {
         addToast(updateFurniture.messages || 'Ocorreu um erro!', {
@@ -212,18 +233,33 @@ const CreateFurniture: React.FC = () => {
     }
   };
 
+  const handleClickCreateVariationCard = () => {
+    if (!createVariations) {
+      setCreateVariations([
+        {
+          id: 0,
+          title: '',
+          value: 0,
+          status: 1,
+          priceIndex: 0,
+          imageSrc: '',
+          description: '',
+          furnitureId: 0,
+          roomId: 0,
+          percentageByColor: 0,
+          percentageByLaca: 0,
+          percentageByTamponade: 0,
+        },
+      ]);
+    }
+  };
+
   React.useEffect(() => {
     verifyNavigationType();
   }, [refresh]);
 
   React.useEffect(() => {
     checkEditMode();
-  }, [furnitureName, furnitureStatus]);
-
-  React.useEffect(() => {
-    logger.log(
-      `furnitureName: [furnitureName: ${furnitureName}][furnitureStatus: ${furnitureStatus}]`,
-    );
   }, [furnitureName, furnitureStatus]);
 
   return (
@@ -258,7 +294,7 @@ const CreateFurniture: React.FC = () => {
               mode={onEditFurniture ? 'edit' : 'create'}
               type="furniture"
               refresh={refresh}
-              setRefresh={setRefresh}
+              setRefresh={redirectToRooms}
               disabled={false}
               handleClick={() => {
                 /*  */
@@ -339,10 +375,14 @@ const CreateFurniture: React.FC = () => {
               }}
               id="room-name"
             />
-            <GrayButton label="Adicionar variação" />
+            <GrayButton
+              label="Adicionar variação"
+              handleClick={handleClickCreateVariationCard}
+            />
           </Grid>
 
-          {variations.length > 0 ? (
+          {!loading &&
+            variations.length > 0 &&
             variations.map((variation, index: number) => (
               <Variation
                 id={Number(variation.id)}
@@ -352,14 +392,50 @@ const CreateFurniture: React.FC = () => {
                 value={Number(variation.value)}
                 description={variation.description}
                 status={Boolean(variation.status)}
+                furnitureId={furnitureId}
+                roomId={roomId}
+                priceIndex={Number(variation.priceIndex)}
                 handleCreateClick={() => {
                   /*  */
                 }}
+                handleDeleteClick={() => {
+                  getFurnitureById({ furnitureId, roomId });
+                }}
+                handleClickCancel={() => {
+                  /* * */
+                }}
               />
-            ))
-          ) : (
-            <Loading />
-          )}
+            ))}
+
+          {!loading &&
+            createVariations &&
+            createVariations.length > 0 &&
+            createVariations.map(variation => (
+              <Variation
+                id={Number(variation.id)}
+                type="create"
+                index={variations.length + 1}
+                title={variation.title}
+                value={Number(variation.value)}
+                description={variation.description}
+                status={Boolean(variation.status)}
+                furnitureId={furnitureId}
+                roomId={roomId}
+                priceIndex={variation.priceIndex}
+                handleCreateClick={() => {
+                  getFurnitureById({ furnitureId, roomId });
+                  popCreatedVariation();
+                }}
+                handleDeleteClick={() => {
+                  /*  */
+                }}
+                handleClickCancel={() => {
+                  popCreatedVariation();
+                }}
+              />
+            ))}
+
+          {loading && <Loading />}
         </section>
       )}
     </Container>

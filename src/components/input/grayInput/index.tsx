@@ -34,9 +34,6 @@ const GrayInput: React.FC<IGrayInputProps> = ({
     }
   }
 
-  React.useEffect(() => {
-    console.log(value);
-  }, [value]);
   return (
     <Container className="gray-input">
       <InputMask

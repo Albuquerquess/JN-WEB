@@ -47,7 +47,7 @@ const ContactForm: React.FC = () => {
 
       navigate('/detalhes');
       removeAllToasts();
-      addToast('Informaçõoes salvas', {
+      addToast('informações salvas', {
         appearance: 'success',
         autoDismiss: true,
       });

@@ -110,6 +110,7 @@ const PricePreview: React.FC = () => {
           }),
         ),
       };
+
       setColorsAndTamponades(colorsAndTamponadesFormated);
     } catch (error: AxiosError | unknown) {
       removeAllToasts();

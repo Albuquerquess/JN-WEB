@@ -21,7 +21,7 @@ export const Container = styled.div<IStylePricePreview>`
 
   background: transparent linear-gradient(264deg, #303030 0%, #404040 100%) 0%
     0% no-repeat padding-box;
-  opacity: 1;
+  opacity: 0.98;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   div#price-preview-wrapper {

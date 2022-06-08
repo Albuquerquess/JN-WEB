@@ -1,6 +1,6 @@
 export type IOption = {
   value: string;
-  label: JSX.Element;
+  label: any;
   priceIndex: number;
 };
 

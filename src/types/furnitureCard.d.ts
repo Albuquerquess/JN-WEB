@@ -1,6 +1,6 @@
 export interface IVariation {
   id: string;
-  name: string;
+  title: string;
   description: string;
   priceIndex: number;
   imageSrc: string;

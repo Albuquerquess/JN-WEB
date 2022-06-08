@@ -20,6 +20,7 @@ import logger from '../../../../utils/logger';
 import { Container } from './styles';
 
 const CreateRoom: React.FC = () => {
+  const [roomId, setRoomId] = React.useState<number>(0);
   const [roomImage, setRoomImage] = React.useState<File | null>(null);
   const [roomName, setRoomName] = React.useState<string>('');
   const [roomNameInitial, setRoomNameInitial] = React.useState<string>('');
@@ -105,7 +106,7 @@ const CreateRoom: React.FC = () => {
   };
 
   const getRoomById = async (id: string) => {
-    const rooms = await Requests.getRooms();
+    const rooms = await Requests.getAllRooms();
 
     if (rooms && rooms.error) {
       addToast(rooms.messages || 'Ocorreu um erro!', {
@@ -114,7 +115,7 @@ const CreateRoom: React.FC = () => {
       });
     }
 
-    const [room]: IResponseGetRooms[] = rooms.data.filter(
+    const room: IResponseGetRooms = rooms.data.find(
       (room: IResponseGetRooms) => room.id === id,
     );
 
@@ -131,17 +132,22 @@ const CreateRoom: React.FC = () => {
       );
     }
 
-    setRoomNameInitial(room.roomName);
-    setRoomDescriptionInitial(room.description);
+    setRoomId(Number(room.id));
     setRoomName(room.roomName);
+    setRoomNameInitial(room.roomName);
     setRoomDescription(room.description);
+    setRoomDescriptionInitial(room.description);
+
     setTimeout(() => {
       setRoomExists(true);
     }, 200);
   };
 
   const getFurnitures = async (roomId: number) => {
-    const furnitures = await Requests.getFurnituresByRoomId(roomId);
+    const furnitures = await Requests.getFurnituresByRoomId({
+      roomId,
+      getActive: false,
+    });
 
     if (furnitures.error) {
       addToast(furnitures.messages || 'Ocorreu um erro!', {
@@ -294,7 +300,7 @@ const CreateRoom: React.FC = () => {
                 <Item
                   name={furniture.furnitureName}
                   id={Number(furniture.id)}
-                  roomId={undefined}
+                  roomId={roomId}
                   status={Boolean(furniture.status)}
                   type="furniture"
                   mode="edit"

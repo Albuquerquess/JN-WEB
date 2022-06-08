@@ -11,4 +11,5 @@ export interface ISwitchProps {
   navigateTo?: string;
   handleOnActivate?(): void;
   handleOnDisable?(): void;
+  disabled?: boolean;
 }

@@ -18,7 +18,7 @@ const AdminRooms: React.FC = () => {
   const navigate = useNavigate();
 
   async function getRooms() {
-    const rooms = await Requests.getRooms();
+    const rooms = await Requests.getAllRooms();
 
     if (rooms.error) {
       addToast(rooms.messages || 'Ocorreu um erro!', {
@@ -65,7 +65,7 @@ const AdminRooms: React.FC = () => {
                 roomId={undefined}
                 status={Boolean(room.status)}
                 type="room"
-                mode="create"
+                mode="edit"
                 refresh={refresh}
                 setRefresh={setRefresh}
                 handleClick={() => redirectToRoomPage(Number(room.id))}

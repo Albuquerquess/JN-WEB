@@ -30,3 +30,13 @@ export interface IRequestUpdateVariationStatus {
   id: number;
   status: boolean;
 }
+
+export interface IRequestCreateVariation {
+  title: string;
+  value: number;
+  description: string;
+  priceIndex: number;
+  furnitureId: number;
+  roomId: number;
+  file: File;
+}

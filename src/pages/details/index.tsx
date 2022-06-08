@@ -137,7 +137,7 @@ const Details: React.FC = () => {
 
       removeAllToasts();
 
-      addToast('Informaçõoes salvas', {
+      addToast('informações salvas', {
         appearance: 'success',
         autoDismiss: true,
       });

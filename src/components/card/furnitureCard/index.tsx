@@ -58,14 +58,14 @@ const FurnitureCard: React.FC<IFurnitureCardProps> = ({
     const payload = {
       furniture_name: furniture.furnitureName,
       room_name: room.name,
-      variation_name: variations[currentVariation].name,
+      variation_name: variations[currentVariation].title,
     };
 
     await Api.post(URLs.furnituresSave, payload);
 
     dispatch(
       addFurniture({
-        furnitureId: variations[currentVariation].id,
+        furnitureId: variations[currentVariation].furnitureId,
         variationId: variations[currentVariation].id,
         roomId: room.id,
         length,
@@ -76,6 +76,7 @@ const FurnitureCard: React.FC<IFurnitureCardProps> = ({
   }
 
   function removeSelectedFurniture() {
+    console.log(variations[currentVariation]);
     dispatch(
       removeFurniture({
         furnitureId: variations[currentVariation].furnitureId,
@@ -116,7 +117,7 @@ const FurnitureCard: React.FC<IFurnitureCardProps> = ({
     label: (
       <div className="select-label">
         {PriceIndex({ index: variation.priceIndex })}
-        {variation.name}
+        {variation.title}
       </div>
     ),
     priceIndex: Number(variation.priceIndex),
