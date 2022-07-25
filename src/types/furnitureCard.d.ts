@@ -11,6 +11,7 @@ export interface IVariation {
 export interface IFurniture {
   id: string;
   furnitureName: string;
+  variationLabel: string | null;
 }
 
 export interface IRoom {

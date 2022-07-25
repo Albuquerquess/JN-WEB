@@ -18,6 +18,7 @@ type IFurnitures = {
   furnitureName: string;
   status: 1 | 0;
   roomId: number;
+  variationLabel: string | null;
   variations: IVariation[];
 };
 
@@ -94,6 +95,7 @@ const Furnitures: React.FC = () => {
                   variations={furniture.variations}
                   furniture={{
                     furnitureName: furniture.furnitureName,
+                    variationLabel: furniture.variationLabel,
                     id: String(furniture.id),
                   }}
                   room={currentRoom}
