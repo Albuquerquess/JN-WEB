@@ -77,7 +77,7 @@ const Rooms: React.FC = () => {
           rooms.map(room => (
             <Card
               image={room.url}
-              description="Do ullamco nisi in id exercitation pariatur aute officia dolor consectetur pariatur enim. "
+              description={room.description}
               title={room.roomName}
             >
               <Button

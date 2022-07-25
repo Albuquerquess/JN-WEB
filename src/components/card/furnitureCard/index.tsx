@@ -150,7 +150,7 @@ const FurnitureCard: React.FC<IFurnitureCardProps> = ({
         <div className="furniture-card-tools-wrapper">
           {variations.length > 1 && (
             <label className="furniture-card-select-box">
-              <p>Selecione uma opção</p>
+              <p>{furniture.variationLabel || 'Selecione uma opção'}</p>
               <Select
                 options={options}
                 defaultValue={
