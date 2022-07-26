@@ -132,11 +132,16 @@ class Requests {
   }
   /* Furnitures */
 
-  async createFurniture({ roomId, name }: IRequestCreateFurniture) {
+  async createFurniture({
+    roomId,
+    name,
+    variationLabel,
+  }: IRequestCreateFurniture) {
     try {
       const response = await Api.post('furniture', {
         roomId,
         name,
+        variationLabel,
       });
 
       return Response.good(response);

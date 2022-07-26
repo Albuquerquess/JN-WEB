@@ -28,13 +28,13 @@ const CreateFurniture: React.FC = () => {
     useParams() as unknown as IParamsFurniturePage;
 
   const [furnitureName, setFurnitureName] = React.useState('');
+  const [variationLabel, setVariationLabel] = React.useState('');
   const [initialfurnitureName, setInitialFurnitureName] = React.useState('');
   const [furnitureStatus, setFurnitureStatus] = React.useState<boolean>(false);
   const [initialFurnitureStatus, setInitialFurnitureStatus] =
     React.useState<boolean>(false);
 
   // Variations
-  const [variationTitle, setVariationTitle] = React.useState('Tipo de portas');
   const [onCreateFurniture, setOnCreateFurniture] = React.useState(false);
   const [onEditFurniture, setOnEditFurniture] = React.useState(false);
   const [variations, setVariations] = React.useState<IVariation[]>([]);
@@ -95,6 +95,7 @@ const CreateFurniture: React.FC = () => {
       setInitialFurnitureName(furniture.data.furniture_name);
       setFurnitureStatus(Boolean(furniture.data.status));
       setFurnitureName(furniture.data.furniture_name);
+      setVariationLabel(furniture.data.variation_label);
 
       setLoading(false);
     }
@@ -189,21 +190,41 @@ const CreateFurniture: React.FC = () => {
   const handleClickCreateFurniture = async ({
     roomId,
     name,
+    variationLabel,
   }: IRequestCreateFurniture) => {
-    const create = await Requests.createFurniture({ roomId, name });
-
-    if (create.error) {
-      addToast(create.messages || 'Ocorreu um erro!', {
+    if (!name) {
+      addToast('Por favor, preencha o nome do móvel!', {
         appearance: 'error',
         autoDismiss: true,
       });
+    } else if (!variationLabel) {
+      addToast(
+        'Por favor, preencha o nome do tipo de variação que o móvel terá!',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+        },
+      );
     } else {
-      navigate(`/admin/ambientes/${roomId}`);
-
-      addToast('Móvel criado com sucesso!', {
-        appearance: 'success',
-        autoDismiss: true,
+      const create = await Requests.createFurniture({
+        roomId,
+        name,
+        variationLabel,
       });
+
+      if (create.error) {
+        addToast(create.messages || 'Ocorreu um erro!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      } else {
+        navigate(`/admin/ambientes/${roomId}`);
+
+        addToast('Móvel criado com sucesso!', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      }
     }
   };
 
@@ -314,6 +335,27 @@ const CreateFurniture: React.FC = () => {
             />
           )}
         </Grid>
+        <Grid
+          gridTemplateColumn="1fr"
+          gridTemplateRows="50px"
+          gapColumn="50px"
+          gapRow="0"
+          margin="41px 0 41px 0"
+        >
+          <LowLabel label="Nome do tipo de variações do móvel" />
+
+          <GrayInput
+            mask=""
+            type="text"
+            placeholder=""
+            value={variationLabel}
+            onChangeValue={setVariationLabel}
+            onInputBlur={() => {
+              /*  */
+            }}
+            id="room-name"
+          />
+        </Grid>
       </section>
       {(onEditFurniture || onCreateFurniture) && (
         <Grid
@@ -328,7 +370,6 @@ const CreateFurniture: React.FC = () => {
             handleClick={
               onEditFurniture
                 ? () => {
-                    console.log(`edit!`);
                     handleClickUpdateFurniture({
                       id: furnitureId,
                       roomId,
@@ -339,6 +380,7 @@ const CreateFurniture: React.FC = () => {
                     handleClickCreateFurniture({
                       roomId,
                       name: furnitureName,
+                      variationLabel,
                     });
                   }
             }
@@ -368,8 +410,8 @@ const CreateFurniture: React.FC = () => {
               mask=""
               type="text"
               placeholder=""
-              value={variationTitle}
-              onChangeValue={setVariationTitle}
+              value={variationLabel}
+              onChangeValue={setVariationLabel}
               onInputBlur={() => {
                 /*  */
               }}
@@ -402,7 +444,7 @@ const CreateFurniture: React.FC = () => {
                   getFurnitureById({ furnitureId, roomId });
                 }}
                 handleClickCancel={() => {
-                  /* * */
+                  /*  */
                 }}
               />
             ))}
