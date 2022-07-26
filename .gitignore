@@ -106,3 +106,5 @@ dist
 settings.json
 
 yarnInstall.sh
+
+build/

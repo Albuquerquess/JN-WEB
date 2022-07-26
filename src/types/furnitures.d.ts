@@ -3,6 +3,7 @@ export interface IFurniture {
   furnitureName: string;
   status: 1 | 0;
   roomId: number;
+  variationLabel: string;
 }
 
 export interface IRequestUpdateFurnitureStatus {
@@ -19,6 +20,7 @@ export interface IRequestUpdateFurniture {
 export interface IRequestCreateFurniture {
   roomId: number;
   name: string;
+  variationLabel: string;
 }
 
 export interface IParamsFurniturePage {
