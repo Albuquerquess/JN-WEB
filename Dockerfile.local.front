@@ -1,0 +1,16 @@
+FROM node:lts as build
+
+ARG REACT_APP_WEB_API NODE_ENV
+ENV REACT_APP_WEB_API=$REACT_APP_WEB_API NODE_ENV=$NODE_ENV
+
+RUN apt -y update
+
+WORKDIR /usr/app
+
+COPY package*.json ./
+
+RUN npm install --silent
+
+COPY . .
+
+CMD [ "npm", "start" ]
