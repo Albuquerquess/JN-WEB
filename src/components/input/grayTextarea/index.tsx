@@ -8,6 +8,7 @@ interface IGrayTeaxtareaProps {
   placeholder: string;
   onChangeValue: React.Dispatch<React.SetStateAction<string>> | undefined;
   onInputBlur: React.Dispatch<React.SetStateAction<string>> | undefined;
+  maxLength: number | undefined;
 }
 
 const GrayTextarea: React.FC<IGrayTeaxtareaProps> = ({
@@ -16,6 +17,7 @@ const GrayTextarea: React.FC<IGrayTeaxtareaProps> = ({
   placeholder,
   onChangeValue,
   onInputBlur,
+  maxLength,
 }) => {
   function handleChangeValue(e: React.ChangeEvent<HTMLTextAreaElement>) {
     if (onChangeValue) {
@@ -40,6 +42,7 @@ const GrayTextarea: React.FC<IGrayTeaxtareaProps> = ({
         }}
         placeholder={placeholder}
         className="gray-input"
+        maxLength={maxLength}
         id={id}
       />
     </Container>

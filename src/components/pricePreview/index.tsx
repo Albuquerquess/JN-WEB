@@ -186,11 +186,14 @@ const PricePreview: React.FC = () => {
       <div id="price-preview-wrapper">
         <main>
           <p id="current-price">
-            <span id="current-price-preview">Preço atual:</span>{' '}
-            {amount.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
+            <span>Preço atual:</span>
+            <span id="current-price-preview">
+              {' '}
+              {amount.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
+            </span>
           </p>
           <div id="price-preview-tools-wrapper">
             <div className="price-preview-select-box">

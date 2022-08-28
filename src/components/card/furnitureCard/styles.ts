@@ -46,7 +46,7 @@ export const Container = styled.div<IStyleCardProps>`
 
       p {
         font-size: 1.2em;
-        line-height: 18px;
+        line-height: 24px;
       }
     }
 
@@ -152,7 +152,7 @@ export const Container = styled.div<IStyleCardProps>`
           font-size: 2em;
           font-weight: 300;
 
-          max-height: 115px;
+          max-height: 122px;
           overflow: hidden;
           margin-bottom: 10px;
         }
