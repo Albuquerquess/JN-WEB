@@ -71,6 +71,8 @@ const Variation: React.FC<IPropsVariations> = ({
 
   const [onEditVariation, setOnEditVariation] = React.useState<boolean>(false);
 
+  const VARIATION_MAX_DESCRIPTION_LENGTH = 234;
+
   const { addToast } = useToasts();
 
   const priceIndexes = [1, 2, 3].map((priceIndex: number) => ({
@@ -348,7 +350,7 @@ const Variation: React.FC<IPropsVariations> = ({
           value={variationDescription}
           placeholder=""
           onChangeValue={setVariationDescription}
-          maxLength={276}
+          maxLength={VARIATION_MAX_DESCRIPTION_LENGTH}
           onInputBlur={() => {
             /*  */
           }}
