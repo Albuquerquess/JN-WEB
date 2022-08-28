@@ -152,7 +152,7 @@ export const Container = styled.div<IStyleCardProps>`
           font-size: 2em;
           font-weight: 300;
 
-          max-height: 115px;
+          max-height: 122px;
           overflow: hidden;
           margin-bottom: 10px;
         }
