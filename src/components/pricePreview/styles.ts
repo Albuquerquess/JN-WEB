@@ -19,11 +19,10 @@ export const Container = styled.div<IStylePricePreview>`
 
   color: ${props => props.theme.colors.textLight};
 
-  background: transparent linear-gradient(264deg, #303030 0%, #404040 100%) 0%
-    0% no-repeat padding-box;
-  opacity: 0.98;
+  background: rgba(48, 48, 48, 0.7);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 5px 5px 30px rgb(48, 48, 48, 40%);
+
   div#price-preview-wrapper {
     width: 100%;
     height: 100%;
