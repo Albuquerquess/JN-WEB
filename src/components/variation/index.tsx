@@ -348,6 +348,7 @@ const Variation: React.FC<IPropsVariations> = ({
           value={variationDescription}
           placeholder=""
           onChangeValue={setVariationDescription}
+          maxLength={276}
           onInputBlur={() => {
             /*  */
           }}

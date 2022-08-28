@@ -253,6 +253,7 @@ const CreateRoom: React.FC = () => {
             value={roomDescription}
             placeholder="Descrição..."
             onChangeValue={setRoomDescription}
+            maxLength={undefined}
             onInputBlur={() => {
               /*  */
             }}
