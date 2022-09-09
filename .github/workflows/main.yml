@@ -46,9 +46,11 @@ jobs:
       id: validate
       run: terraform validate -no-color
 
+    - name: Checkout again
+      uses: actions/checkout@v3
+
     - name: Terraform Plan
       id: plan
-      uses: actions/checkout@v3
       run: terraform plan -no-color -input=false
       continue-on-error: true
 
