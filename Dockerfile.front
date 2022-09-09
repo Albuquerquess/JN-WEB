@@ -1,0 +1,22 @@
+FROM node:lts as build
+
+ARG REACT_APP_WEB_API
+ENV REACT_APP_WEB_API=$REACT_APP_WEB_API
+
+RUN apt -y update
+
+WORKDIR /usr/app
+
+COPY package*.json ./
+
+RUN npm install --silent
+
+COPY . .
+RUN REACT_APP_WEB_API=$REACT_APP_WEB_API npm run build
+
+# production environment
+FROM node:lts
+COPY --from=build /usr/app/build ./jn
+RUN npm i -g serve
+EXPOSE 3000
+CMD [ "serve", "-s", "./jn" ]
