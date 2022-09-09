@@ -47,7 +47,7 @@ jobs:
       run: terraform validate -no-color
 
     - name: Checkout again
-      uses: ls -la
+      run: ls -la
 
     - name: Terraform Plan
       id: plan
