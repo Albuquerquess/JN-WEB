@@ -20,10 +20,6 @@ jobs:
 
       run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
-    - name: list tree
-      working-directory: ./
-      run: ls -la && docker image ls
-
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
