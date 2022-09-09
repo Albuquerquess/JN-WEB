@@ -2,7 +2,9 @@ name: build-docker-jn-web
 
 on:
   pull_request:
-    branches: [] # [dev]
+    branches: [dev]
+  push:
+    branches: [dev]
 
   workflow_dispatch:
 
@@ -18,8 +20,12 @@ jobs:
 
       run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
 
-
-
     - name: list tree
       working-directory: ./
       run: ls -la
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWD }}
