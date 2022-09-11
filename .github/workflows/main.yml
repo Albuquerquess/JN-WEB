@@ -15,19 +15,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Build the docker image
-      #   working-directory: ./
+      - name: Build the docker image
+        working-directory: ./
 
-      #   run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
+        run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWD }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWD }}
 
-      # - name: Push image to Docker Hub
-      #   run: docker push albuquerquedev/front-orcamento-express:prod
+      - name: Push image to Docker Hub
+        run: docker push albuquerquedev/front-orcamento-express:prod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
