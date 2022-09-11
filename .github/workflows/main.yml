@@ -52,7 +52,7 @@ jobs:
         run: ls -la
 
       - name: list tree AFTER INIT back page
-        run: ls -la../
+        run: ls -la ../
 
       - name: Terraform validate
         id: validate
