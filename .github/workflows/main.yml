@@ -31,6 +31,9 @@ jobs:
           aws-region: us-east-1
           role-session-name: GitActionsConfigCredentials
 
+      - name: list aws credentials
+        run: cat ~/.aws/credentials
+
 
 
       # - name: Build the docker image from production
