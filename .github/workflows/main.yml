@@ -82,8 +82,8 @@ jobs:
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: printf '
             aws_default_tags              = { "name" = "JN - Express Budget" }\n
-            aws_access_key_id              = "AKIAQIGJGVEJH3QVMI5O"\n
-            aws_secret_access_key          = "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"\n
+            aws_access_key_id              = "${{ secrets.AWS_ACCESS_KEY_ID }}"\n
+            aws_secret_access_key          = "${{ secrets.AWS_SECRET_ACCESS_KEY }}"\n
             aws_profile                    = "JNRoot"\n
             aws_region                     = "us-east-1"\n
             aws_ami                        = "ami-04505e74c0741db8d"\n
