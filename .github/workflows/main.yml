@@ -110,11 +110,23 @@ jobs:
       - name: set dev terraform workspace
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: terraform workspace select dev || terraform workspace new dev
-        env: 
+        env:
+          SOURCE_DIR: '.'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: 'jn-s3-terraform-state'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
       - name: set prod terraform workspace
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: terraform workspace select prod || terraform workspace new prod
+        env:
+          SOURCE_DIR: '.'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: 'jn-s3-terraform-state'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
 
 
       - name: Terraform validate
@@ -141,7 +153,7 @@ jobs:
       # - name: Sync S3
       #   uses: jakejarvis/s3-sync-action@master
       #   env:
-      #     SOURCE_DIR: './src'
+      #     SOURCE_DIR: '.'
       #     AWS_REGION: 'us-east-1'
       #     AWS_S3_BUCKET: 'jn-s3-terraform-state'
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
