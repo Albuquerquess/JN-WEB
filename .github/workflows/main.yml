@@ -21,7 +21,7 @@ jobs:
         id: extract_branch
 
       - name: echo branch name
-        run: echo >> Current branch is - ${{ steps.extract_branch.outputs.branch }}
+        run: echo >> Current branch is ${{ steps.extract_branch.outputs.branch }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
