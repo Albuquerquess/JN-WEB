@@ -96,6 +96,9 @@ jobs:
             aws_vpc_enable_dns_support = true\n
             aws_subnet_availability_zone = us-east-1a\n" > prod.tfvars
 
+      - name: Cat env files
+        run: cat prod.tfvars
+
       - name: Terraform Init
         id: init
         run: terraform init -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -backend-config="region=us-east-1" 
@@ -127,8 +130,8 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
       - name: Terraform validate
-        
         id: validate
         run: terraform validate -no-color
 
