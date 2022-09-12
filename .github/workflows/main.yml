@@ -61,7 +61,7 @@ jobs:
       - name: generate terraform dev env files
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: printf '
-            aws_default_tags = ""\n
+            aws_default_tags = {name: "test"}\n
             aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
             aws_secret_access_key = "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"\n
             aws_profile = "JNRoot"\n
@@ -81,7 +81,7 @@ jobs:
       - name: generate terraform prod env files
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: printf '
-            aws_default_tags = ""\n
+            aws_default_tags = {name: "test"}\n
             aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
             aws_secret_access_key = "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"\n
             aws_profile = "JNRoot"\n
