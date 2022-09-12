@@ -87,35 +87,31 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
-
-
       - name: Terraform validate
+        
         id: validate
         run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false
+        run: |
+          terraform plan -no-color -input=false /
+            -var 'aws_access_key_id = AKIAQIGJGVEJH3QVMI5O' \
+            -var 'aws_secret_access_key = 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' \
+            -var 'aws_profile = JNRoot' \
+            -var 'aws_region = us-east-1' \
+            -var 'aws_ami = ami-04505e74c0741db8d' \
+            -var 'aws_instance_type = t2.micro' \
+            -var 'aws_subnet_public_cidr_block = 10.0.1.0/24' \
+            -var 'aws_subnet_private_cidr_block = 10.0.2.0/24' \
+            -var 'aws_vpc_cird_block = 10.0.0.0/16' \
+            -var 'aws_vpc_enable_dns_hostnames = ru' \
+            -var 'subnet_map_public_ip_on_launch = ru' \
+            -var 'destination_cidr_block = 0.0.0.0/0' \
+            -var 'aws_vpc_instance_tenancy = default' \
+            -var 'aws_vpc_enable_dns_support = ru' \
+            -var 'aws_subnet_availability_zone = us-east-1a' 
         continue-on-error: true
-        with:
-          variables: |
-            aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"
-            aws_secret_access_key = "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"
-            aws_profile = "JNRoot"
-            aws_region = "us-east-1"
-            aws_ami = "ami-04505e74c0741db8d"
-            aws_instance_type = "t2.micro"
-            aws_subnet_public_cidr_block = "10.0.1.0/24"
-            aws_subnet_private_cidr_block = "10.0.2.0/24"
-            aws_vpc_cird_block = "10.0.0.0/16"
-            aws_vpc_enable_dns_hostnames = true
-            subnet_map_public_ip_on_launch = true
-            destination_cidr_block = "0.0.0.0/0"
-            aws_vpc_instance_tenancy = "default"
-            aws_vpc_enable_dns_support = true
-            aws_subnet_availability_zone = "us-east-1a"
-
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
