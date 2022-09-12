@@ -47,4 +47,5 @@ jobs:
           repository: Albuquerquess/jn-infra
           token: ${{ secrets.GH_TOKEN }}
 
-     
+      - name: echo ls
+        run: ls -la
