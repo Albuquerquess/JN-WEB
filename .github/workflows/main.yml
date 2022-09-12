@@ -31,7 +31,6 @@ jobs:
       #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
       # - name: Build the docker image from develop 
-      
       #   working-directory: ./
       #   if: ${{ steps.extract_branch.outputs.branch =='develop' }}
       #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
@@ -62,7 +61,7 @@ jobs:
       - name: generate terraform dev env files
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: printf '
-            aws_default_tags = {name: "test"}\n
+            aws_default_tags = ""\n
             aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
             aws_secret_access_key = "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"\n
             aws_profile = "JNRoot"\n
@@ -82,7 +81,7 @@ jobs:
       - name: generate terraform prod env files
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: printf '
-            aws_default_tags = {name: "test"}\n
+            aws_default_tags = ""\n
             aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
             aws_secret_access_key = "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"\n
             aws_profile = "JNRoot"\n
