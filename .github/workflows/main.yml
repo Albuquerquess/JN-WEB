@@ -72,8 +72,6 @@ jobs:
 
           TF_VAR_aws_secret_access_key:  "mPQWDBx3BiKKOy6O877hyktgx7zFk2pJKTQsjU+5"
 
-          TF_VAR_current_environment:  "prod"
-
           TF_VAR_aws_profile:  "JNRoot"
 
           TF_VAR_aws_region:  "us-east-1"
