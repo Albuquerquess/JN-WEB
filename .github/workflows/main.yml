@@ -96,23 +96,22 @@ jobs:
         id: plan
         run: terraform plan 
         continue-on-error: true
-        with:
-          args: 
-            - -var='aws_access_key_id = AKIAQIGJGVEJH3QVMI5O' \
-            - -var='aws_secret_access_key = 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' \
-            - -var='aws_profile = JNRoot' \
-            - -var='aws_region = us-east-1' \
-            - -var='aws_ami = ami-04505e74c0741db8d' \
-            - -var='aws_instance_type = t2.micro' \
-            - -var='aws_subnet_public_cidr_block = 10.0.1.0/24' \
-            - -var='aws_subnet_private_cidr_block = 10.0.2.0/24' \
-            - -var='aws_vpc_cird_block = 10.0.0.0/16' \
-            - -var='aws_vpc_enable_dns_hostnames = ru' \
-            - -var='subnet_map_public_ip_on_launch = ru' \
-            - -var='destination_cidr_block = 0.0.0.0/0' \
-            - -var='aws_vpc_instance_tenancy = default' \
-            - -var='aws_vpc_enable_dns_support = ru' \
-            - -var='aws_subnet_availability_zone = us-east-1a' \
+        args: 
+          - -var='aws_access_key_id = AKIAQIGJGVEJH3QVMI5O' \
+          - -var='aws_secret_access_key = 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' \
+          - -var='aws_profile = JNRoot' \
+          - -var='aws_region = us-east-1' \
+          - -var='aws_ami = ami-04505e74c0741db8d' \
+          - -var='aws_instance_type = t2.micro' \
+          - -var='aws_subnet_public_cidr_block = 10.0.1.0/24' \
+          - -var='aws_subnet_private_cidr_block = 10.0.2.0/24' \
+          - -var='aws_vpc_cird_block = 10.0.0.0/16' \
+          - -var='aws_vpc_enable_dns_hostnames = ru' \
+          - -var='subnet_map_public_ip_on_launch = ru' \
+          - -var='destination_cidr_block = 0.0.0.0/0' \
+          - -var='aws_vpc_instance_tenancy = default' \
+          - -var='aws_vpc_enable_dns_support = ru' \
+          - -var='aws_subnet_availability_zone = us-east-1a' \
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
