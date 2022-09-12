@@ -62,7 +62,7 @@ jobs:
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: printf '
             aws_default_tags = {
-              name = "JN - Express Budget"
+              "name" = "JN - Express Budget"
             }\n
             aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
             aws_secret_access_key = "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"\n
