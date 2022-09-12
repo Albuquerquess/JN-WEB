@@ -164,7 +164,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply Dev
-        run: terraform apply -auto-approve -input=false dev.out
+        run: TF_LOG=DEBUG terraform apply -auto-approve -input=false dev.out
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -173,7 +173,7 @@ jobs:
               AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Apply Prod
-        run: terraform apply -auto-approve -input=false prod.out
+        run: TF_LOG=DEBUG terraform apply -auto-approve -input=false prod.out
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
