@@ -61,44 +61,42 @@ jobs:
       - name: generate terraform dev env files
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: printf '
-            aws_default_tags = {"name" = "JN - Express Budget"}\n
-            aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
-            aws_secret_access_key = "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"\n
-            aws_profile = "JNRoot"\n
-            aws_region = "us-east-1"\n
-            aws_ami = "ami-04505e74c0741db8d"\n
-            aws_instance_type = "t2.micro"\n
-            aws_subnet_public_cidr_block = "10.0.1.0/24"\n
-            aws_subnet_private_cidr_block = "10.0.2.0/24"\n
-            aws_vpc_cird_block = "10.0.0.0/16"\n
-            aws_vpc_enable_dns_hostnames = "true"\n
+           aws_default_tags                = { "name" = "JN - Express Budget" }\n
+            aws_access_key_id              = "AKIAQIGJGVEJH3QVMI5O"\n
+            aws_secret_access_key          = "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"\n
+            aws_profile                    = "JNRoot"\n
+            aws_region                     = "us-east-1"\n
+            aws_ami                        = "ami-04505e74c0741db8d"\n
+            aws_instance_type              = "t2.micro"\n
+            aws_subnet_public_cidr_block   = "10.0.1.0/24"\n
+            aws_subnet_private_cidr_block  = "10.0.2.0/24"\n
+            aws_vpc_cird_block             = "10.0.0.0/16"\n
+            aws_vpc_enable_dns_hostnames   = "true"\n
             subnet_map_public_ip_on_launch = "true"\n
-            destination_cidr_block = "0.0.0.0/0"\n
-            aws_vpc_instance_tenancy = "default"\n
-            aws_vpc_enable_dns_support = "true"\n
-            aws_subnet_availability_zone = "us-east-1a"\n' > dev.tfvars
+            destination_cidr_block         = "0.0.0.0/0"\n
+            aws_vpc_instance_tenancy       = "default"\n
+            aws_vpc_enable_dns_support     = "true"\n
+            aws_subnet_availability_zone   = "us-east-1a"\n' > dev.tfvars
 
       - name: generate terraform prod env files
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: printf '
-            aws_default_tags = {
-              name = JN - Express Budget
-            }\n
-            aws_access_key_id = "AKIAQIGJGVEJH3QVMI5O"\n
-            aws_secret_access_key = "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"\n
-            aws_profile = "JNRoot"\n
-            aws_region = "us-east-1"\n
-            aws_ami = "ami-04505e74c0741db8d"\n
-            aws_instance_type = "t2.micro"\n
-            aws_subnet_public_cidr_block = "10.0.1.0/24"\n
-            aws_subnet_private_cidr_block = "10.0.2.0/24"\n
-            aws_vpc_cird_block = "10.0.0.0/16"\n
-            aws_vpc_enable_dns_hostnames = "true"\n
+             aws_default_tags                = { "name" = "JN - Express Budget" }\n
+            aws_access_key_id              = "AKIAQIGJGVEJH3QVMI5O"\n
+            aws_secret_access_key          = "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"\n
+            aws_profile                    = "JNRoot"\n
+            aws_region                     = "us-east-1"\n
+            aws_ami                        = "ami-04505e74c0741db8d"\n
+            aws_instance_type              = "t2.micro"\n
+            aws_subnet_public_cidr_block   = "10.0.1.0/24"\n
+            aws_subnet_private_cidr_block  = "10.0.2.0/24"\n
+            aws_vpc_cird_block             = "10.0.0.0/16"\n
+            aws_vpc_enable_dns_hostnames   = "true"\n
             subnet_map_public_ip_on_launch = "true"\n
-            destination_cidr_block = "0.0.0.0/0"\n
-            aws_vpc_instance_tenancy = "default"\n
-            aws_vpc_enable_dns_support = "true"\n
-            aws_subnet_availability_zone = "us-east-1a"\n'> prod.tfvars
+            destination_cidr_block         = "0.0.0.0/0"\n
+            aws_vpc_instance_tenancy       = "default"\n
+            aws_vpc_enable_dns_support     = "true"\n
+            aws_subnet_availability_zone   = "us-east-1a"\n' > prod.tfvars
 
       - name: Cat env files
         run: cat prod.tfvars
