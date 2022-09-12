@@ -134,13 +134,13 @@ jobs:
 
       - name: Terraform dev Plan
         id: plan-dev
-        run: terraform plan -no-color -input=false -var-file=dev.tfvars
+        run: terraform plan -no-color -input=false -var-file=dev.tfvars -out=dev.out
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         continue-on-error: true
 
       - name: Terraform prod Plan
         id: plan-prod
-        run: terraform plan -no-color -input=false -var-file=prod.tfvars
+        run: terraform plan -no-color -input=false -var-file=prod.tfvars -out=prod.out
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         continue-on-error: true
 
@@ -149,7 +149,17 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false dev.out
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              TF_ACTION_WORKING_DIR: '.'
+              AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false prod.out
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
         env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               TF_ACTION_WORKING_DIR: '.'
