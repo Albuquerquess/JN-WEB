@@ -133,13 +133,13 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform dev Plan
-        id: plan
+        id: plan-dev
         run: terraform plan -no-color -input=false -var-file=dev.tfvars
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         continue-on-error: true
 
       - name: Terraform prod Plan
-        id: plan
+        id: plan-prod
         run: terraform plan -no-color -input=false -var-file=prod.tfvars
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         continue-on-error: true
