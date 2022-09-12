@@ -23,22 +23,28 @@ jobs:
       - name: echo branch name
         run: echo ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Build the docker image from production
-        working-directory: ./
-        if: ${{ steps.extract_branch.outputs.branch =='main' }}
-        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
+      # - name: Build the docker image from production
+      #   working-directory: ./
+      #   if: ${{ steps.extract_branch.outputs.branch =='main' }}
+      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
-      - name: Build the docker image from develop 
-        working-directory: ./
-        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
-        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      # - name: Build the docker image from develop 
+      #   working-directory: ./
+      #   if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWD }}
+
+      # - name: Push image to Docker Hub
+      #   run: docker push albuquerquedev/front-orcamento-express:prod
+
+      - name: Check out my other private repo
+        uses: actions/checkout@main
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWD }}
-
-      - name: Push image to Docker Hub
-        run: docker push albuquerquedev/front-orcamento-express:prod
+          repository: Albuquerquess/jn-infra
+          token: ${{ secrets.GH_TOKEN }}
 
      
