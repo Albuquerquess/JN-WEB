@@ -205,12 +205,6 @@ jobs:
               AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
               AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
 
-      - name: ls
-        run: ls -la
-
-      - name: ls back
-        run: ls -la ..
-
       - name: Sync S3 dev
         uses: jakejarvis/s3-sync-action@master
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
