@@ -53,28 +53,28 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_PROD }} --profile orcamento-express-prod
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }} --profile orcamento-express-prod
 
-      # - name: Build the docker image from production
-      #   working-directory: ./
-      #   if: ${{ steps.extract_branch.outputs.branch =='main' }}
-      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
+      - name: Build the docker image from production
+        working-directory: ./
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
-      # - name: Build the docker image from develop 
-      #   working-directory: ./
-      #   if: ${{ steps.extract_branch.outputs.branch =='develop' }}
-      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWD }}
+      - name: Build the docker image from develop 
+        working-directory: ./
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWD }}
 
-      # - name: Push dev image to Docker Hub
-      #   if: ${{ steps.extract_branch.outputs.branch =='develop' }}
-      #   run: docker push albuquerquedev/front-orcamento-express:dev
+      - name: Push dev image to Docker Hub
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        run: docker push albuquerquedev/front-orcamento-express:dev
       
-      # - name: Push prod image to Docker Hub
-      #   if: ${{ steps.extract_branch.outputs.branch =='main' }}
-      #   run: docker push albuquerquedev/front-orcamento-express:prod
+      - name: Push prod image to Docker Hub
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        run: docker push albuquerquedev/front-orcamento-express:prod
 
       - name: Check out my other private repo
         uses: actions/checkout@main
@@ -213,7 +213,7 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          DEST_DIR: "tfstate/"
+          DEST_DIR: "dev/tfstate/"
       
       - name: Sync S3 prod
         uses: jakejarvis/s3-sync-action@master
@@ -223,5 +223,5 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          DEST_DIR: "tfstate/"
+          DEST_DIR: "prod/tfstate/"
 
