@@ -121,14 +121,14 @@ jobs:
             aws_subnet_availability_zone   = "us-east-1a"\n' > prod.tfvars
 
       - name: Terraform Init dev
-        id: init
+        id: init-dev
         run: terraform init -backend=true -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID_DEV }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}" -backend-config="region=us-east-1" -backend-config="bucket=jn-s3-terraform-state" -backend-config="key=dev/tfstate/terraform.tfstate"
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Terraform Init prod
-        id: init
+        id: init-prod
         run: terraform init -backend=true -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID_PROD }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}" -backend-config="region=us-east-1" -backend-config="bucket=jn-s3-terraform-state" -backend-config="key=prod/tfstate/terraform.tfstate"
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         env:
