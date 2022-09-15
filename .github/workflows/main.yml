@@ -229,5 +229,5 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-          DEST_DIR: "dev/tfstate/"
+          DEST_DIR: "prod/tfstate/"
 
