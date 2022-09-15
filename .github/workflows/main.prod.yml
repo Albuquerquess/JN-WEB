@@ -40,7 +40,7 @@ jobs:
         run: docker push albuquerquedev/front-orcamento-express:prod
 
   terraform-apply:
-    uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@add-apply-workflow
+    uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@main
     with:
       environment: prod
     secrets:
