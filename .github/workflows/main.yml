@@ -23,32 +23,47 @@ jobs:
       - name: echo branch name
         run: echo >> Current branch is ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS dev credentials
         uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          aws-region: us-east-1
+          role-session-name: GitActionsConfigCredentials
+
+      - name: Configure AWS prod credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
           aws-region: us-east-1
           role-session-name: GitActionsConfigCredentials
 
 
-      # - name: Build the docker image from production
-      #   working-directory: ./
-      #   if: ${{ steps.extract_branch.outputs.branch =='main' }}
-      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
+      - name: Build the docker image from production
+        working-directory: ./
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:prod .
 
-      # - name: Build the docker image from develop 
-      #   working-directory: ./
-      #   if: ${{ steps.extract_branch.outputs.branch =='develop' }}
-      #   run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWD }}
+      - name: Build the docker image from develop 
+        working-directory: ./
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWD }}
 
-      # - name: Push image to Docker Hub
-      #   run: docker push albuquerquedev/front-orcamento-express:prod
+      - name: Push dev image to Docker Hub
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        run: docker push albuquerquedev/front-orcamento-express:dev
+      
+      - name: Push prod image to Docker Hub
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        run: docker push albuquerquedev/front-orcamento-express:prod
 
       - name: Check out my other private repo
         uses: actions/checkout@main
@@ -61,17 +76,17 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # - name: Terraform Format
-      #   id: fmt
-      #   run: terraform fmt -check
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
       
       - name: generate terraform dev env files
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         run: printf '
-           aws_default_tags                = { "name" = "JN - Express Budget" }\n
-            aws_access_key_id              = "AKIAQIGJGVEJH3QVMI5O"\n
-            aws_secret_access_key          = "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"\n
-            aws_profile                    = "JNRoot"\n
+            aws_default_tags                = { "name" = "JN - Express Budget" }\n
+            aws_access_key_id              = "${{ secrets.AWS_ACCESS_KEY_ID_DEV }}"\n
+            aws_secret_access_key          = "${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}"\n
+            aws_profile                    = "orcamento-express-dev"\n
             aws_region                     = "us-east-1"\n
             aws_ami                        = "ami-04505e74c0741db8d"\n
             aws_instance_type              = "t2.micro"\n
@@ -89,9 +104,9 @@ jobs:
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         run: printf '
             aws_default_tags              = { "name" = "JN - Express Budget" }\n
-            aws_access_key_id              = "${{ secrets.AWS_ACCESS_KEY_ID }}"\n
-            aws_secret_access_key          = "${{ secrets.AWS_SECRET_ACCESS_KEY }}"\n
-            aws_profile                    = "JNRoot"\n
+            aws_access_key_id              = "${{ secrets.AWS_ACCESS_KEY_ID_PROD }}"\n
+            aws_secret_access_key          = "${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}"\n
+            aws_profile                    = "orcamento-express-prod"\n
             aws_region                     = "us-east-1"\n
             aws_ami                        = "ami-04505e74c0741db8d"\n
             aws_instance_type              = "t2.micro"\n
@@ -105,20 +120,19 @@ jobs:
             aws_vpc_enable_dns_support     = "true"\n
             aws_subnet_availability_zone   = "us-east-1a"\n' > prod.tfvars
 
-      - name: Cat env files
-        run: cat prod.tfvars
-
-      - name: Terraform Init
+      - name: Terraform Init dev
         id: init
-        run: terraform init -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -backend-config="region=us-east-1" 
+        run: terraform init -backend=true -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID_DEV }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}" -backend-config="region=us-east-1" -backend-config="bucket=jn-s3-terraform-state" -backend-config="key=dev/tfstate/terraform.tfstate"
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TF_ACTION_WORKING_DIR: 'terraform'
-          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          
-      - name: list tree AFTER INIT
-        run: ls -la
+
+      - name: Terraform Init prod
+        id: init
+        run: terraform init -backend=true -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID_PROD }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}" -backend-config="region=us-east-1" -backend-config="bucket=jn-s3-terraform-state" -backend-config="key=prod/tfstate/terraform.tfstate"
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: set dev terraform workspace
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
@@ -127,8 +141,8 @@ jobs:
           SOURCE_DIR: '.'
           AWS_REGION: 'us-east-1'
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
       
       - name: set prod terraform workspace
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
@@ -137,8 +151,8 @@ jobs:
           SOURCE_DIR: '.'
           AWS_REGION: 'us-east-1'
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
       
       - name: Terraform validate
         id: validate
@@ -156,9 +170,6 @@ jobs:
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         continue-on-error: true
 
-      - name: list tree
-        run: ls -la
-
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
@@ -169,8 +180,8 @@ jobs:
         env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               TF_ACTION_WORKING_DIR: '.'
-              AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-              AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+              AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
 
       - name: Terraform Apply Prod
         run: terraform apply -auto-approve -input=false prod.out
@@ -178,14 +189,25 @@ jobs:
         env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               TF_ACTION_WORKING_DIR: '.'
-              AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-              AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+              AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
 
-      # - name: Sync S3
-      #   uses: jakejarvis/s3-sync-action@master
-      #   env:
-      #     SOURCE_DIR: '.'
-      #     AWS_REGION: 'us-east-1'
-      #     AWS_S3_BUCKET: 'jn-s3-terraform-state'
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Sync S3 dev
+        uses: jakejarvis/s3-sync-action@master
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        env:
+          SOURCE_DIR: 'dev/tfstate/terraform.tfstate'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: 'jn-s3-terraform-state'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+      
+      - name: Sync S3 prod
+        uses: jakejarvis/s3-sync-action@master
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        env:
+          SOURCE_DIR: 'prod/tfstate/terraform.tfstate'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: 'jn-s3-terraform-state'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
