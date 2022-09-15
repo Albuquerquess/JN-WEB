@@ -208,6 +208,9 @@ jobs:
       - name: ls
         run: ls -la
 
+      - name: ls back
+        run: ls -la ..
+
       - name: Sync S3 dev
         uses: jakejarvis/s3-sync-action@master
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
