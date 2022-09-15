@@ -220,6 +220,7 @@ jobs:
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          DEST_DIR: "dev/tfstate/"
       
       - name: Sync S3 prod
         uses: jakejarvis/s3-sync-action@master
