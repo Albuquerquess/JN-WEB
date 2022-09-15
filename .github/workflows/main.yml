@@ -215,7 +215,6 @@ jobs:
         uses: jakejarvis/s3-sync-action@master
         if: ${{ steps.extract_branch.outputs.branch =='develop' }}
         env:
-          SOURCE_DIR: 'dev/tfstate/terraform.tfstate'
           AWS_REGION: 'us-east-1'
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
@@ -226,8 +225,9 @@ jobs:
         uses: jakejarvis/s3-sync-action@master
         if: ${{ steps.extract_branch.outputs.branch =='main' }}
         env:
-          SOURCE_DIR: 'prod/tfstate/terraform.tfstate'
           AWS_REGION: 'us-east-1'
           AWS_S3_BUCKET: 'jn-s3-terraform-state'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          DEST_DIR: "dev/tfstate/"
+
