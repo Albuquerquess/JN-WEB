@@ -41,6 +41,18 @@ jobs:
           aws-region: us-east-1
           role-session-name: GitActionsConfigCredentials
 
+      - name: Add dev profile credentials to ~/.aws/credentials
+        if: ${{ steps.extract_branch.outputs.branch =='develop' }}
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_DEV }} --profile orcamento-express-dev
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }} --profile orcamento-express-dev
+      
+      - name: Add prod profile credentials to ~/.aws/credentials
+        if: ${{ steps.extract_branch.outputs.branch =='main' }}
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_PROD }} --profile orcamento-express-prod
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }} --profile orcamento-express-prod
+
 
       # - name: Build the docker image from production
       #   working-directory: ./
