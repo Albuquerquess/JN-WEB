@@ -53,11 +53,6 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_PROD }} --profile orcamento-express-prod
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }} --profile orcamento-express-prod
 
-
-      - name: cat aws file
-        run: cat ~/.aws/credentials
-
-
       # - name: Build the docker image from production
       #   working-directory: ./
       #   if: ${{ steps.extract_branch.outputs.branch =='main' }}
@@ -209,6 +204,9 @@ jobs:
               TF_ACTION_WORKING_DIR: '.'
               AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
               AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+
+      - name: ls
+        run: ls -la
 
       - name: Sync S3 dev
         uses: jakejarvis/s3-sync-action@master
