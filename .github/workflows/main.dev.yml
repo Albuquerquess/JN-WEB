@@ -1,4 +1,4 @@
-name: build-docker-jn-web
+name: build-docker-jn-web-dev
 
 on:
   workflow_dispatch:
