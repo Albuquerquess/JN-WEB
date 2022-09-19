@@ -2,6 +2,7 @@ name: build-docker-jn-web-dev
 
 on:
   workflow_dispatch:
+    - ref: 'dev'
 
   pull_request:
     branches: [develop]
