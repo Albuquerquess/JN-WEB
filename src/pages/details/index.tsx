@@ -166,7 +166,7 @@ const Details: React.FC = () => {
         <Card
           title="Cor dos móveis"
           description="Cor de todos os móveis do ambiente que você está orçando."
-          image="https://cdn.leroymerlin.com.br/products/armario_superior_2_portas_32x70x30cm_branco_spaceo_89565952_0001_600x600.jpg"
+          image="https://i.imgur.com/W2z3eLr.png"
         >
           {colorsAndTamponades && colorsAndTamponades.colors && (
             <Select
@@ -185,7 +185,7 @@ const Details: React.FC = () => {
         <Card
           title="Tamponamento"
           description="Tamponamento de todos os móveis do ambiente que você está orçando."
-          image="https://cdn.leroymerlin.com.br/products/armario_superior_2_portas_32x70x30cm_branco_spaceo_89565952_0001_600x600.jpg"
+          image="https://i.imgur.com/CEu6Zr2.png"
         >
           {colorsAndTamponades && colorsAndTamponades.colors && (
             <Select
