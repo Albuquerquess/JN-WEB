@@ -19,6 +19,10 @@ interface progressBarProps {
   porcent: number
 }
 
+type ISetpProps = {
+  accomplished: boolean
+}
+
 const visiblePages = [
   'contato',
   'detalhes',
@@ -36,10 +40,11 @@ const steps: {[key: string]: number} = {
 const ProgressBar: React.FC<progressBarProps> = () => {
   const { pathname } = useLocation();
   const pathnameFormated = pathname.slice(1);
-  const percent: number = steps[pathnameFormated];
+  const percent = steps[pathnameFormated];
 
   return (
     <Container visible={visiblePages.includes(pathnameFormated)}>
+      <div id="progress-bar-line-background">
       <Pg
         percent={percent}
         filledBackground="#00d84f"
@@ -47,30 +52,31 @@ const ProgressBar: React.FC<progressBarProps> = () => {
       >
 
         <Step>
-          {({ accomplished }: any) => (
-            <img src={accomplished ? contactActiveIcon : contactIcon} alt="Contato" />
+          {(props: ISetpProps) => (
+            <img src={props.accomplished ? contactActiveIcon : contactIcon} alt="Contato" />
           )}
         </Step>
         <Step>
-          {({ accomplished }: any) => (
-            <img src={accomplished ? detailsActiveIcon : detailsIcon} alt="Contato" />
+          {(props: ISetpProps) => (
+            <img src={props.accomplished ? detailsActiveIcon : detailsIcon} alt="Contato" />
 
           )}
         </Step>
         <Step>
-          {({ accomplished }: any) => (
-            <img src={accomplished ? furnituresActiveIcon : furnituresIcon} alt="Contato" />
+          {(props: ISetpProps) => (
+            <img src={props.accomplished ? furnituresActiveIcon : furnituresIcon} alt="Contato" />
 
           )}
         </Step>
         <Step>
-          {({ accomplished }: any) => (
+          {({ accomplished }: ISetpProps) => (
             <img src={accomplished ? budgetActiveIcon : budgetIcon} alt="Contato" />
 
           )}
         </Step>
 
       </Pg>
+      </div>
     </Container>
   );
 };

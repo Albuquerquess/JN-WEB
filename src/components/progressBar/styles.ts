@@ -14,6 +14,13 @@ export const Container = styled.div<IStyleProgressBarProps>`
   justify-content: center;
   margin-bottom: 3em;
 
+  div#progress-bar-line-background {
+    width: 100%;
+    background: #707070;
+    height: 2px;
+    z-index: 0;
+  }
+
   div.RSPBprogressBar {
     height: 100%;
     width: 100%;
