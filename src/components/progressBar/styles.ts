@@ -64,7 +64,7 @@ export const Container = styled.div<IStyleProgressBarProps>`
   }
 
   @media screen and (min-width: ${breakpoints.md}) {
-    margin-bottom: 13.7em;
+    margin-bottom: 15.7em;
     div.RSPBprogressBar > div.RSPBstep > div.step-container {
       img {
         width: 7em;
