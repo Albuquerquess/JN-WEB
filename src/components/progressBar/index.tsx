@@ -53,24 +53,36 @@ const ProgressBar: React.FC<progressBarProps> = () => {
 
         <Step>
           {(props: ISetpProps) => (
+            <div className="step-container">
             <img src={props.accomplished ? contactActiveIcon : contactIcon} alt="Contato" />
+            <div>Contato</div>
+            </div>
           )}
         </Step>
         <Step>
           {(props: ISetpProps) => (
-            <img src={props.accomplished ? detailsActiveIcon : detailsIcon} alt="Contato" />
+            <div className="step-container">
+            <img src={props.accomplished ? detailsActiveIcon : detailsIcon} alt="Detalhes" />
+            <div>Detalhes</div>
+            </div>
 
           )}
         </Step>
         <Step>
           {(props: ISetpProps) => (
-            <img src={props.accomplished ? furnituresActiveIcon : furnituresIcon} alt="Contato" />
+            <div className="step-container">
+            <img src={props.accomplished ? furnituresActiveIcon : furnituresIcon} alt="Móveis" />
+            <div>Móveis</div>
+            </div>
 
           )}
         </Step>
         <Step>
-          {({ accomplished }: ISetpProps) => (
-            <img src={accomplished ? budgetActiveIcon : budgetIcon} alt="Contato" />
+          {(props: ISetpProps) => (
+            <div className="step-container">
+            <img src={props.accomplished ? budgetActiveIcon : budgetIcon} alt="Orçamento" />
+            <div>Orçamento</div>
+            </div>
 
           )}
         </Step>
