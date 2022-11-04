@@ -6,7 +6,7 @@ import { Container } from './styles';
 
 const Header: React.FC = () => {
   return (
-    <Link to="/" style={{ cursor: 'pointer' }}>
+    <Link to="/" style={{ cursor: 'pointer', marginBottom: '6em' }}>
       <Container>
         <img src={logo} alt="JN - Móveis Planejados" />
       </Container>
