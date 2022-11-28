@@ -1,5 +1,5 @@
 class Logger {
-  log(message: string, others?: any): void {
+  log(message: string, others?: unknown): void {
     if (this.shouldLog()) {
       if (!others) {
         console.log(`[${process.env.NODE_ENV}]: ${message}`);
@@ -10,7 +10,7 @@ class Logger {
   }
 
   shouldLog() {
-    return process.env.NODE_ENV === 'develop';
+    return (process.env.NODE_ENV as string) === 'develop';
   }
 }
 
