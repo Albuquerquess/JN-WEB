@@ -10,7 +10,7 @@ class Logger {
   }
 
   shouldLog() {
-    return process.env.NODE_ENV === 'development';
+    return process.env.NODE_ENV === 'develop';
   }
 }
 

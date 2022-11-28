@@ -30,7 +30,7 @@ jobs:
 
       - name: Build the docker image
         working-directory: ./
-        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=development -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+        run: docker build --build-arg REACT_APP_WEB_API=https://jnmoveis.com.br/api --build-arg NODE_ENV=develop -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
