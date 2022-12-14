@@ -2,7 +2,7 @@ name: build-docker-jn-web-dev
 
 on:
   workflow_dispatch:
-    - ref: 'dev'
+    - ref: ['develop']
 
   pull_request:
     branches: [develop]
@@ -11,11 +11,11 @@ on:
 jobs:
   build_container:
     runs-on: ubuntu-latest
-
     steps:
+      - run: echo "${{ github.event.action }}"
       - uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+     - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
@@ -31,6 +31,7 @@ jobs:
       - name: Build the docker image
         working-directory: ./
         run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=develop -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+      
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
