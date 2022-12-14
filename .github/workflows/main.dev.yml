@@ -2,7 +2,6 @@ name: build-docker-jn-web-dev
 
 on:
   workflow_dispatch:
-    - ref: ['develop']
 
   pull_request:
     branches: [develop]
@@ -10,6 +9,8 @@ on:
 
 jobs:
   build_container:
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - run: echo "${{ github.event.action }}"
