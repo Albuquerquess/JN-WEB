@@ -9,7 +9,7 @@ on:
     types: [closed]
 
 jobs:
-  build-container:
+  build_container:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,11 +40,16 @@ jobs:
       - name: Push dev image to Docker Hub
         run: docker push albuquerquedev/front-orcamento-express:dev
 
-  terraform-apply:
-    uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@main
-    with:
-      environment: dev
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID_DEV}}
-      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
-      GH_TOKEN: ${{secrets.GH_TOKEN}}
+    # terraform_apply:
+    # name: Apply
+    # needs: build_container
+    # uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@develop
+    # if: ${{ always() }}
+    # with:
+    #   environment: dev
+    # secrets:
+    #   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID_DEV}}
+    #   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
+    #   GH_TOKEN: ${{secrets.GH_TOKEN}}
+    #   AWS_SSH_JN_PUB: ${{secrets.AWS_SSH_JN_PUB_DEV}}
+    #   DESTINATION_CIDR_BLOCK: ${{secrets.DESTINATION_CIDR_BLOCK}}
