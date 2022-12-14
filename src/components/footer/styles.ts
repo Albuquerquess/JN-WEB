@@ -57,7 +57,7 @@ export const Container = styled.div<IStyleFooterProps>`
       }
     }
   }
-  section#footer-copy-right {
+  section#footer-copyright {
     width: 100%;
     background-color: ${props => props.theme.colors.copyRight};
     text-align: center;
@@ -89,7 +89,7 @@ export const Container = styled.div<IStyleFooterProps>`
       }
     }
 
-    section#footer-copy-right {
+    section#footer-copyright {
       line-height: 15px;
       & > p,
       & > span#devs > p {
@@ -104,7 +104,7 @@ export const Container = styled.div<IStyleFooterProps>`
   }
 
   @media screen and (min-width: ${breakpoints.lg}) {
-    section#footer-copy-right {
+    section#footer-copyright {
       width: 100%;
 
       flex-direction: row;

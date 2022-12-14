@@ -9,7 +9,7 @@ import { Container } from './styles';
 
 const Footer: React.FC = () => {
   const { pathname } = useLocation();
-
+  const VERSION = '0.1';
   return (
     <Container onFurniturePage={pathname === '/moveis'}>
       <main>
@@ -44,9 +44,10 @@ const Footer: React.FC = () => {
           </a>
         </section>
       </main>
-      <section id="footer-copy-right">
+      <section id="footer-copyright">
         <p>
-          <strong>2021 Copyright: </strong>JN Móveis.
+          <strong>2021 Copyright: </strong>JN Móveis. V
+          <strong>{VERSION}</strong>
         </p>
         <span id="devs">
           <p>
