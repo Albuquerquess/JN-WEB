@@ -1,57 +1,57 @@
-name: build-docker-jn-web-dev
+# name: build-docker-jn-web-dev
 
-on:
-  workflow_dispatch:
+# on:
+#   workflow_dispatch:
 
-  pull_request:
-    branches: [develop]
-    types: [closed]
+#   pull_request:
+#     branches: [develop]
+#     types: [closed]
 
-jobs:
-  build_container:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ github.event.action }}"
-      - uses: actions/checkout@v3
+# jobs:
+#   build_container:
+#     if: ${{ github.event_name == 'pull_request' }}
+#     name: Build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "${{ github.event.action }}"
+#       - uses: actions/checkout@v3
 
-     - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          aws-region: us-east-1
-          role-session-name: GitActionsConfigCredentials
+#      - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+#           aws-region: us-east-1
+#           role-session-name: GitActionsConfigCredentials
 
-      - name: Add profile credentials to ~/.aws/credentials
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_DEV }} --profile orcamento-express-dev
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }} --profile orcamento-express-dev
+#       - name: Add profile credentials to ~/.aws/credentials
+#         run: |
+#           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_DEV }} --profile orcamento-express-dev
+#           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }} --profile orcamento-express-dev
 
-      - name: Build the docker image
-        working-directory: ./
-        run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=develop -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
+#       - name: Build the docker image
+#         working-directory: ./
+#         run: docker build --build-arg REACT_APP_WEB_API=http://jnmoveis.com.br/api --build-arg NODE_ENV=develop -f Dockerfile.front -t albuquerquedev/front-orcamento-express:dev .
       
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWD }}
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWD }}
 
-      - name: Push dev image to Docker Hub
-        run: docker push albuquerquedev/front-orcamento-express:dev
+#       - name: Push dev image to Docker Hub
+#         run: docker push albuquerquedev/front-orcamento-express:dev
 
-    # terraform_apply:
-    # name: Apply
-    # needs: build_container
-    # uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@develop
-    # if: ${{ always() }}
-    # with:
-    #   environment: dev
-    # secrets:
-    #   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID_DEV}}
-    #   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
-    #   GH_TOKEN: ${{secrets.GH_TOKEN}}
-    #   AWS_SSH_JN_PUB: ${{secrets.AWS_SSH_JN_PUB_DEV}}
-    #   DESTINATION_CIDR_BLOCK: ${{secrets.DESTINATION_CIDR_BLOCK}}
+#     # terraform_apply:
+#     # name: Apply
+#     # needs: build_container
+#     # uses: Albuquerquess/jn-infra/.github/workflows/apply.yml@develop
+#     # if: ${{ always() }}
+#     # with:
+#     #   environment: dev
+#     # secrets:
+#     #   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID_DEV}}
+#     #   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY_DEV}}
+#     #   GH_TOKEN: ${{secrets.GH_TOKEN}}
+#     #   AWS_SSH_JN_PUB: ${{secrets.AWS_SSH_JN_PUB_DEV}}
+#     #   DESTINATION_CIDR_BLOCK: ${{secrets.DESTINATION_CIDR_BLOCK}}
