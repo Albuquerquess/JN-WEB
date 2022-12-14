@@ -13,6 +13,7 @@ import URLs from '../../helpers/URLs';
 import { Api } from '../../services/api';
 import { IAppState, IAppStateContacts } from '../../store/types';
 import { IFurnitureStorage } from '../../store/types/rooms';
+import logger from '../../utils/logger';
 import { Container } from './styles';
 
 type IBudgetDetails = {
@@ -64,12 +65,17 @@ const Budget: React.FC = () => {
   const { addToast } = useToasts();
 
   function downloadPDF(pdf: Buffer, title: string) {
-    const url = window.URL.createObjectURL(new Blob([pdf]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${title}.pdf`);
-    document.body.appendChild(link);
-    link.click();
+    try {
+      logger.log('BudgetPage - downloadPDF - ', { pdf, title });
+      const url = window.URL.createObjectURL(new Blob([pdf]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${title}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      logger.log('[ERROR] - BudgetPage - downloadPDF - ', { error });
+    }
   }
 
   function getFurnituresByCurrentRoom(): IFurnitureStorage[] {
@@ -194,7 +200,7 @@ const Budget: React.FC = () => {
     }
 
     const response = await Api.post(
-      URLs.generateBudgetPDF,
+      '/budget',
       {
         furnitures: furnituresByCurrentRoom,
         details: colorAndTamponade,
@@ -206,15 +212,15 @@ const Budget: React.FC = () => {
       },
     );
 
-    if (response.status !== 201) {
+    if (response.status !== 200) {
       return addToast(
         'Não foi possível gerar o orçamento. Por favor, contate o suporte!',
         {
           appearance: 'warning',
           autoDismiss: true,
-          onDismiss: () => {
-            window.location.reload();
-          },
+          // onDismiss: () => {
+          //   window.location.reload();
+          // },
         },
       );
     }
