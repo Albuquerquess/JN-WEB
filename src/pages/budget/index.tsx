@@ -63,18 +63,13 @@ const Budget: React.FC = () => {
   );
   const { addToast } = useToasts();
 
-  function downloadPDF(pdf: File, title: string) {
-    const downloadElement = document.createElement('a');
-    const url = window.URL.createObjectURL(pdf);
-
-    downloadElement.href = url;
-    downloadElement.download = title;
-
-    document.body.append(downloadElement);
-    downloadElement.click();
-    downloadElement.remove();
-
-    window.URL.revokeObjectURL(url);
+  function downloadPDF(pdf: Buffer, title: string) {
+    const url = window.URL.createObjectURL(new Blob([pdf]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${title}.pdf`);
+    document.body.appendChild(link);
+    link.click();
   }
 
   function getFurnituresByCurrentRoom(): IFurnitureStorage[] {
