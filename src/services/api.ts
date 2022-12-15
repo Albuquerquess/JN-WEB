@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { IAppStateContacts } from '../store/types';
+import { IFurnitureStorage } from '../store/types/rooms';
 import {
   IRequestUpdateFurnitureStatus,
   IParamsFurniturePage,
@@ -9,6 +11,7 @@ import {
   IRequestSaveSelectedFurniture,
   IParamsGetFurnituresByRoomId,
 } from '../types/furnitures';
+import { IColorAndTamponade } from '../types/redux/detail';
 import {
   IRequestUpdateRoom,
   IRequestCreateRoom,
@@ -320,6 +323,33 @@ class Requests {
   async getColorAndTamponade() {
     try {
       const response = await Api.get('/colors-and-tamponade/index');
+
+      return Response.good(response);
+    } catch (error) {
+      return Response.bad(error);
+    }
+  }
+
+  /* Budget  */
+  async makeBudget(
+    furnitures: IFurnitureStorage[],
+    details: IColorAndTamponade,
+    roomId: string,
+    client: IAppStateContacts,
+  ) {
+    try {
+      const response = await Api.post(
+        '/budget',
+        {
+          furnitures,
+          details,
+          roomId,
+          client,
+        },
+        {
+          responseType: 'blob',
+        },
+      );
 
       return Response.good(response);
     } catch (error) {
